@@ -4,11 +4,11 @@ version: "1.0.0"
 slash_command: /security-scan
 tags: [security, audit, workflow]
 depends_on:
-  skills: [security/scanner, security/owasp]
-  agents: [security-auditor]
+  skills: [domains/security-review, domains/audit-verification]
+  agents: [security/security-auditor]
   commands: []
 
-description: Scan the codebase for injection, auth, secrets, and dependency vulnerabilities, then report prioritized findings.
+description: Scan the codebase for injection, auth, secrets, and dependency vulnerabilities, verifying each finding before reporting.
 
 parameters:
   - name: scope
@@ -26,18 +26,22 @@ parameters:
 
 steps:
   - agent: security/security-auditor
-    action: "Inventory code in scope={{scope}}. Identify entry points: HTTP handlers, auth layers, data access, file I/O, subprocess calls, template rendering."
+    action: "Inventory code in scope={{scope}}. Identify entry points: HTTP handlers, auth layers, data access, file I/O, subprocess calls, template rendering. Map trust boundaries."
     await_result: true
     on_failure: abort
   - agent: security/security-auditor
-    action: "Run secrets detection and dependency vulnerability scanners appropriate to the project ecosystem. Capture CVEs, CVSS, and fixed-in versions."
+    action: "Run secrets detection and dependency vulnerability scanners (npm audit, etc). Capture CVEs with CVSS and fixed-in versions. For each CVE, check whether the project's code path actually exercises the vulnerable code (if it does not, downgrade severity)."
     await_result: true
     on_failure: skip
   - agent: security/security-auditor
-    action: "Manual review pass: injection (SQL/command/path), XSS, CSRF, auth/session handling, crypto misuse, SSRF, IDOR, unsafe deserialization. Tag each finding with severity and remediation."
+    action: "Generate candidate findings from: injection (SQL/command/path), XSS, CSRF, auth/session handling, crypto misuse, SSRF, IDOR, unsafe deserialization. Do NOT report yet — this is the candidate list."
     await_result: true
     on_failure: abort
   - agent: security/security-auditor
-    action: "Emit a prioritized report. Return non-zero if any finding >= {{fail_on}}."
+    action: "VERIFICATION PASS: for each candidate finding from the previous step, apply the audit-verification methodology. Read the full function, trace data flow (source → sink), write a concrete exploit scenario, check existing mitigations, and rule out the false-positive patterns. Drop any finding that fails verification."
+    await_result: true
+    on_failure: abort
+  - agent: security/security-auditor
+    action: "Emit the verified report. Each finding must include: data flow, exploit scenario with attacker prerequisites, ruled-out mitigations, 'why this isn't a false positive' paragraph, and concrete fix. Return non-zero if any verified finding >= {{fail_on}}."
     await_result: true
     on_failure: abort

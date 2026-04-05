@@ -157,6 +157,11 @@ skills:
     category: domains
     language: null
     tags: [security, review, owasp]
+  - id: domains/audit-verification
+    path: domains/audit-verification.md
+    category: domains
+    language: null
+    tags: [security, audit, verification, review]
   - id: domains/tdd
     path: domains/tdd.md
     category: domains

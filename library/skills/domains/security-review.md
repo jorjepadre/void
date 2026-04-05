@@ -5,7 +5,7 @@ version: "1.0.0"
 description: Security-focused review covering OWASP risks, secrets, injection, and auth.
 language: null
 tags: [security, review, owasp]
-depends_on: []
+depends_on: [domains/audit-verification]
 capabilities: [security-audit, threat-modeling]
 parameters: []
 tools: []
@@ -15,6 +15,21 @@ constraints: []
 # Security Review
 
 A security-focused review pass to catch common classes of vulnerabilities before they ship.
+
+## Rule Zero: Verify Before Reporting
+
+**Every finding must be verified by reading actual code flow, not pattern
+matching.** See the `audit-verification` skill for the methodology.
+
+Never flag a line of code without:
+1. Reading the full function that contains it
+2. Tracing where the flagged data comes from (source)
+3. Tracing where it goes (sink)
+4. Writing a concrete exploit scenario as a sentence
+5. Checking for existing mitigations
+6. Considering runtime guarantees (e.g., single-threaded JavaScript)
+
+If you can't complete steps 1–5, you don't have a finding. Drop it.
 
 ## Scope
 
