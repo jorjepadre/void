@@ -1,0 +1,37 @@
+id: language-variants/build-fix-kotlin
+name: Build Fix (Kotlin)
+version: "1.0.0"
+slash_command: /build-fix-kotlin
+tags: [build, debugging, kotlin]
+depends_on:
+  skills: [languages/kotlin/patterns, build/resolver-kotlin]
+  agents: [build-resolver-kotlin]
+  commands: []
+
+description: Incrementally fix Kotlin build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-kotlin
+    action: "Run `./gradlew build` and capture all diagnostics. Also run `./gradlew detekt ktlintCheck` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-kotlin
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-kotlin
+    action: "Fix one error at a time for typical Kotlin issues (unresolved reference, type mismatch, non-exhaustive when, smart cast impossible, suspend misuse). Apply minimal edits, re-run `./gradlew build` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-kotlin
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

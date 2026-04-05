@@ -1,0 +1,42 @@
+id: language-variants/tdd-perl
+name: TDD (Perl)
+version: "1.0.0"
+slash_command: /tdd-perl
+tags: [testing, tdd, perl]
+depends_on:
+  skills: [languages/perl/patterns, languages/perl/testing, tdd-workflow]
+  agents: [tdd-guide-perl]
+  commands: []
+
+description: Enforce red-green-refactor TDD for Perl using Test::More and Test2::V0.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Perl function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in Perl with todo/panic/not-implemented stubs. Write tests using Test::More and Test2::V0 covering happy path, edges, and errors. Run `prove -lr t/` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic Perl (use strict, use warnings, lexical scope, explicit return, avoid symbol table hacks). Minimal code only. Re-run `prove -lr t/` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `prove -lr t/` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `cover -test` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

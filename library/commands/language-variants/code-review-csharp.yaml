@@ -1,0 +1,36 @@
+id: language-variants/code-review-csharp
+name: Code Review (C#)
+version: "1.0.0"
+slash_command: /code-review-csharp
+tags: [review, quality, csharp]
+depends_on:
+  skills: [languages/csharp/patterns, code-quality/reviewer-csharp, security/scanner]
+  agents: [reviewer-csharp]
+  commands: []
+
+description: C#-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-csharp
+    action: "Gather changed C# files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-csharp
+    action: "Run static analysis: `dotnet format --verify-no-changes`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-csharp
+    action: "Manual review pass for C#. Check idiomatic patterns (nullable reference types, records, async/await throughout, IDisposable via using), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-csharp
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

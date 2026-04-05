@@ -1,0 +1,11 @@
+id: config-protection
+event: PreToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+  file_path: "**/{.eslintrc*,.prettierrc*,biome.json,tsconfig*.json,.editorconfig}"
+priority: 900
+timeout_ms: 2000
+command: "void hook run config-protection"
+description: Warns or blocks unauthorized modifications to project configuration files.
+profiles: [standard, strict]
+enabled: true

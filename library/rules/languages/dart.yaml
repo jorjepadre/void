@@ -1,0 +1,42 @@
+id: languages/dart
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Follow the official Dart style guide and run dart format"
+      - "Use lowerCamelCase for identifiers and UpperCamelCase for types"
+      - "Use lowercase_with_underscores for filenames and libraries"
+      - "Use final and const for values that never change"
+
+  null_safety:
+    weight: 10
+    rules:
+      - "Write sound null-safe code; avoid the ! operator"
+      - "Prefer required named parameters over nullable ones when the value must be provided"
+      - "Use late only when initialization truly must be deferred"
+
+  async:
+    weight: 10
+    rules:
+      - "Use async/await with Future and Stream"
+      - "Handle Stream subscriptions and cancel them in dispose"
+      - "Avoid blocking the event loop with heavy synchronous work"
+
+  flutter:
+    weight: 10
+    rules:
+      - "Prefer small, composable widgets over monolithic build methods"
+      - "Mark widgets const wherever possible for rebuild efficiency"
+      - "Separate presentation from business logic"
+      - "Dispose controllers and listeners in State.dispose"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Catch specific exceptions, not generic Object"
+      - "Use Result or sealed classes for expected failures where appropriate"
+      - "Avoid swallowing errors silently"

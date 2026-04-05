@@ -1,0 +1,36 @@
+id: language-variants/code-review-dart
+name: Code Review (Dart/Flutter)
+version: "1.0.0"
+slash_command: /code-review-dart
+tags: [review, quality, dart]
+depends_on:
+  skills: [languages/dart/patterns, code-quality/reviewer-dart, security/scanner]
+  agents: [reviewer-dart]
+  commands: []
+
+description: Dart/Flutter-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-generic
+    action: "Gather changed Dart/Flutter files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Run static analysis: `dart analyze --fatal-infos`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-generic
+    action: "Manual review pass for Dart/Flutter. Check idiomatic patterns (null safety, const constructors, immutable state, single responsibility widgets), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

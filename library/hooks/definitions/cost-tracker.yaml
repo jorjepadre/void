@@ -1,0 +1,8 @@
+id: cost-tracker
+event: Stop
+priority: 2
+timeout_ms: 2000
+command: "void hook run cost-tracker"
+description: Tracks token usage and cost per session and appends to the usage ledger.
+profiles: [standard, strict]
+enabled: true

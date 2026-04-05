@@ -1,0 +1,37 @@
+id: workflows/context-budget
+name: Context Budget Optimizer
+version: "1.0.0"
+slash_command: /context-budget
+tags: [context, optimization, meta, workflow]
+depends_on:
+  skills: [context-budget]
+  agents: [context-optimizer]
+  commands: []
+
+description: Inventory what is loaded in the context window, detect waste, and report prioritized savings.
+
+parameters:
+  - name: window_size
+    type: number
+    required: false
+    description: Assumed context window in tokens
+    default: 200000
+  - name: verbose
+    type: boolean
+    required: false
+    description: Include per-file breakdown
+    default: false
+
+steps:
+  - agent: design/architect
+    action: "Inventory everything currently loaded: skills, agents, commands, files, prior tool outputs. Estimate tokens per entry against window={{window_size}}."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Detect waste: duplicate content, unused skills, oversized files, stale tool output. Verbose={{verbose}}."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Report prioritized savings ranked by tokens reclaimed, with concrete unload/prune actions."
+    await_result: true
+    on_failure: skip

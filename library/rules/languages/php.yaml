@@ -1,0 +1,37 @@
+id: languages/php
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Follow PSR-12 for formatting and PSR-4 for autoloading"
+      - "Use camelCase for methods and variables, PascalCase for classes"
+      - "Target modern PHP (8.x) features"
+      - "Always start files with <?php and omit the closing tag in class files"
+
+  typing:
+    weight: 10
+    rules:
+      - "Declare strict_types at the top of every file"
+      - "Use parameter, property, and return type declarations"
+      - "Use readonly properties and constructor property promotion"
+      - "Leverage enums and union types instead of string constants"
+
+  structure:
+    weight: 10
+    rules:
+      - "Manage dependencies with Composer and lock versions"
+      - "Organize code into namespaces that match directory structure"
+      - "Keep classes small and focused on a single responsibility"
+      - "Favor dependency injection over static facades"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Throw typed exceptions for exceptional conditions"
+      - "Catch specific exception classes; avoid catching Throwable broadly"
+      - "Validate input at the controller or command boundary"
+      - "Never expose raw exception details to end users"

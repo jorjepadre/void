@@ -1,0 +1,42 @@
+id: language-variants/tdd-swift
+name: TDD (Swift)
+version: "1.0.0"
+slash_command: /tdd-swift
+tags: [testing, tdd, swift]
+depends_on:
+  skills: [languages/swift/patterns, languages/swift/testing, tdd-workflow]
+  agents: [tdd-guide-swift]
+  commands: []
+
+description: Enforce red-green-refactor TDD for Swift using XCTest or Swift Testing.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Swift function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in Swift with todo/panic/not-implemented stubs. Write tests using XCTest or Swift Testing covering happy path, edges, and errors. Run `swift test` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic Swift (value types, guard let, Result, protocol-oriented, no force unwrap). Minimal code only. Re-run `swift test` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `swift test` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `swift test --enable-code-coverage` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

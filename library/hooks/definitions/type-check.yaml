@@ -1,0 +1,11 @@
+id: type-check
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+  file_path: "**/*.{ts,tsx}"
+priority: 40
+timeout_ms: 30000
+command: "void hook run type-check"
+description: Runs TypeScript type-checker on edited files and surfaces errors.
+profiles: [standard, strict]
+enabled: true

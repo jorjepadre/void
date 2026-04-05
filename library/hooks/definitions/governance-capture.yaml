@@ -1,0 +1,8 @@
+id: governance-capture
+event: PostToolUse
+priority: 1
+timeout_ms: 3000
+command: "void hook run governance-capture"
+description: Captures policy violations and guardrail triggers for governance audit trail.
+profiles: [strict]
+enabled: true

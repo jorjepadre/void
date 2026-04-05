@@ -1,0 +1,37 @@
+id: common/performance
+layer: common
+specificity: 0
+extends: null
+
+sections:
+  philosophy:
+    weight: 10
+    rules:
+      - "Make it correct first, then fast"
+      - "Avoid premature optimization; measure before you tune"
+      - "Optimize the bottleneck, not what you assume is slow"
+      - "Prefer simple code over micro-optimizations that obscure intent"
+
+  measurement:
+    weight: 10
+    rules:
+      - "Profile code with real workloads before optimizing"
+      - "Establish benchmarks and track them over time"
+      - "Compare alternatives with reproducible measurements"
+      - "Watch for regressions in CI when performance matters"
+
+  algorithms:
+    weight: 10
+    rules:
+      - "Know the time and space complexity of the data structures you use"
+      - "Prefer O(log n) or O(n) algorithms over O(n^2) on hot paths"
+      - "Cache expensive, repeatable computations when safe"
+      - "Avoid repeated work inside tight loops"
+
+  resources:
+    weight: 10
+    rules:
+      - "Release resources promptly; close connections, files, and handles"
+      - "Batch I/O and network calls to reduce round trips"
+      - "Use streaming for large data rather than loading it all into memory"
+      - "Parallelize independent work when the workload justifies the complexity"

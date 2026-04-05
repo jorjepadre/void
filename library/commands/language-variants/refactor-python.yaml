@@ -1,0 +1,42 @@
+id: language-variants/refactor-python
+name: Refactor (Python)
+version: "1.0.0"
+slash_command: /refactor-python
+tags: [refactor, quality, python]
+depends_on:
+  skills: [languages/python/patterns, refactoring/safe-transforms]
+  agents: [refactorer-python]
+  commands: []
+
+description: Safely refactor Python code behind a passing test suite, favoring idiomatic patterns.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Python module, file, or pattern to refactor
+  - name: goal
+    type: enum
+    required: false
+    description: Primary refactor goal
+    default: clarity
+    values: [clarity, performance, deduplication, dead-code, decoupling]
+
+steps:
+  - agent: refactoring/refactor-cleaner
+    action: "Establish baseline: run `pytest` and confirm green. If {{target}} coverage is insufficient for the {{goal}} refactor, add characterization tests first."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Analyze {{target}} (Python) for {{goal}} opportunities applying idiomatic patterns (type hints, dataclasses, context managers, no bare except). Categorize as SAFE / CAUTION / DANGER."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Apply SAFE refactors one at a time. Run `pytest` after each; revert immediately on any failure."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: refactoring/refactor-cleaner
+    action: "Summarize refactors applied, skipped, and changes in test count, coverage, and complexity for {{target}}."
+    await_result: true
+    on_failure: skip

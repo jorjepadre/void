@@ -1,0 +1,41 @@
+id: common/coding-style
+layer: common
+specificity: 0
+extends: null
+
+sections:
+  naming:
+    weight: 10
+    rules:
+      - "Use descriptive names that reveal intent; avoid single-letter identifiers except for tight loops"
+      - "Name booleans as predicates (isReady, hasValue, canEdit)"
+      - "Use consistent casing within a language's conventions"
+      - "Prefer full words over abbreviations unless the abbreviation is universally understood"
+      - "Name functions with verbs and variables with nouns"
+
+  structure:
+    weight: 10
+    rules:
+      - "Keep functions short and focused on a single responsibility"
+      - "Limit function arguments; group related parameters into objects when the list grows"
+      - "Organize files so the most important exports appear first"
+      - "Keep modules cohesive: one concept per file"
+      - "Avoid deep nesting; return early and flatten control flow"
+
+  readability:
+    weight: 10
+    rules:
+      - "Write code for humans first, machines second"
+      - "Prefer clarity over cleverness"
+      - "Delete dead code rather than commenting it out"
+      - "Use comments to explain why, not what"
+      - "Format consistently using the project's automated formatter"
+
+  principles:
+    weight: 10
+    rules:
+      - "Follow KISS: the simplest solution that works is usually the right one"
+      - "Follow DRY: eliminate duplication, but not prematurely"
+      - "Follow YAGNI: do not add functionality until it is needed"
+      - "Favor composition over inheritance"
+      - "Make illegal states unrepresentable in the type system when possible"

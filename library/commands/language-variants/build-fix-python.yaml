@@ -1,0 +1,37 @@
+id: language-variants/build-fix-python
+name: Build Fix (Python)
+version: "1.0.0"
+slash_command: /build-fix-python
+tags: [build, debugging, python]
+depends_on:
+  skills: [languages/python/patterns, build/resolver-python]
+  agents: [build-resolver-python]
+  commands: []
+
+description: Incrementally fix Python build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-python
+    action: "Run `python -m compileall -q . && mypy .` and capture all diagnostics. Also run `ruff check . && mypy .` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-python
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-python
+    action: "Fix one error at a time for typical Python issues (ImportError, TypeError, mypy incompatible types, AttributeError). Apply minimal edits, re-run `python -m compileall -q . && mypy .` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-python
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

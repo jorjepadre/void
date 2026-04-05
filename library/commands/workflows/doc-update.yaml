@@ -1,0 +1,43 @@
+id: workflows/doc-update
+name: Documentation Update
+version: "1.0.0"
+slash_command: /doc-update
+tags: [docs, workflow]
+depends_on:
+  skills: [docs/style-guide, docs/api-extraction]
+  agents: [doc-writer]
+  commands: []
+
+description: Detect stale documentation after code changes and update README, API docs, and inline comments to match reality.
+
+parameters:
+  - name: scope
+    type: enum
+    required: false
+    description: Which docs to update
+    default: changed
+    values: [changed, api, readme, all]
+  - name: since
+    type: string
+    required: false
+    description: Git ref to diff against for detecting changes
+    default: HEAD~1
+
+steps:
+  - agent: documentation/doc-updater
+    action: "Diff the codebase since {{since}}. Identify public API surface changes, new modules, removed modules, and config changes that belong in docs."
+    await_result: true
+    on_failure: abort
+  - agent: documentation/doc-updater
+    action: "For scope={{scope}}, locate affected doc files (README, /docs, inline doc comments, OpenAPI specs). Flag drift between code and docs."
+    await_result: true
+    on_failure: abort
+  - agent: documentation/doc-updater
+    action: "Update the doc files in place. Preserve existing tone and structure. Add examples for new APIs and removal notices for deleted ones."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: documentation/doc-updater
+    action: "Summarize files changed, sections added/removed, and any doc TODOs that need human judgment."
+    await_result: true
+    on_failure: skip

@@ -1,0 +1,14 @@
+name: standard
+description: Standard hook profile — security + quality gates
+hooks:
+  - secret-detection
+  - dangerous-command-block
+  - no-verify-block
+  - config-protection
+  - type-check
+  - lint-check
+  - console-removal
+  - mcp-health
+  - pr-created-log
+  - suggest-compact
+  - cost-tracker

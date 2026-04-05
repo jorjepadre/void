@@ -1,0 +1,36 @@
+id: language-variants/code-review-php
+name: Code Review (PHP)
+version: "1.0.0"
+slash_command: /code-review-php
+tags: [review, quality, php]
+depends_on:
+  skills: [languages/php/patterns, code-quality/reviewer-php, security/scanner]
+  agents: [reviewer-php]
+  commands: []
+
+description: PHP-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-generic
+    action: "Gather changed PHP files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Run static analysis: `./vendor/bin/phpstan analyse && ./vendor/bin/php-cs-fixer fix --dry-run`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-generic
+    action: "Manual review pass for PHP. Check idiomatic patterns (strict_types=1, typed properties, PSR-12, readonly classes, no global state), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

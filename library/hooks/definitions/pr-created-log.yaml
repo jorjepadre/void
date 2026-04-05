@@ -1,0 +1,11 @@
+id: pr-created-log
+event: PostToolUse
+matcher:
+  tool_name: "^Bash$"
+  command: "gh pr create"
+priority: 5
+timeout_ms: 3000
+command: "void hook run pr-created-log"
+description: Records PR creation events (URL, branch, title) to the session audit log.
+profiles: [standard, strict]
+enabled: true

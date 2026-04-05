@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.void/
+*.db
+*.db-journal
+.env
+.env.local
+.DS_Store
+coverage/
+*.tsbuildinfo

@@ -1,0 +1,11 @@
+id: doc-file-warning
+event: PreToolUse
+matcher:
+  tool_name: "^Write$"
+  file_path: "**/*.md"
+priority: 100
+timeout_ms: 1000
+command: "void hook run doc-file-warning"
+description: Warns before creating new markdown docs — verifies the doc was requested and not auto-generated.
+profiles: [strict]
+enabled: true

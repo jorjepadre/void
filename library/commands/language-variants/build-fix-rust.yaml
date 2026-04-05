@@ -1,0 +1,37 @@
+id: language-variants/build-fix-rust
+name: Build Fix (Rust)
+version: "1.0.0"
+slash_command: /build-fix-rust
+tags: [build, debugging, rust]
+depends_on:
+  skills: [languages/rust/patterns, build/resolver-rust]
+  agents: [build-resolver-rust]
+  commands: []
+
+description: Incrementally fix Rust build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-rust
+    action: "Run `cargo build && cargo clippy -- -D warnings` and capture all diagnostics. Also run `cargo clippy -- -D warnings && cargo fmt --check` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-rust
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-rust
+    action: "Fix one error at a time for typical Rust issues (borrow checker conflicts, lifetime mismatches, trait bounds not satisfied, move after use). Apply minimal edits, re-run `cargo build && cargo clippy -- -D warnings` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-rust
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

@@ -1,0 +1,42 @@
+id: workflows/code-review
+name: Code Review
+version: "1.0.0"
+slash_command: /code-review
+tags: [review, quality, security, workflow]
+depends_on:
+  skills: [code-quality/review-checklist, security/scanner]
+  agents: [reviewer]
+  commands: []
+
+description: Review local uncommitted changes or a GitHub pull request across correctness, security, performance, and maintainability.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: PR number, PR URL, branch name, or blank for local uncommitted review
+    default: ""
+  - name: severity_block
+    type: enum
+    required: false
+    description: Minimum severity that blocks approval
+    default: high
+    values: [critical, high, medium, low]
+
+steps:
+  - agent: code-quality/reviewer-generic
+    action: "Gather the review target. If {{target}} is empty, run git diff against HEAD and list changed files. Otherwise resolve {{target}} to a PR, fetch metadata with gh, and list changed files."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Read each changed file in full (not just diff hunks). Review for correctness, type safety, pattern compliance, security, performance, completeness, and maintainability. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Run applicable validation for the detected project type: typecheck, lint, tests, build. Record pass/fail per check."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-generic
+    action: "Decide: APPROVE, REQUEST_CHANGES, or BLOCK. Block if any finding >= {{severity_block}} or validation failed. For PR targets, publish the review via gh; for local, emit a report."
+    await_result: true
+    on_failure: abort

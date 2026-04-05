@@ -1,0 +1,36 @@
+id: workflows/prompt-optimize
+name: Prompt Optimizer
+version: "1.0.0"
+slash_command: /prompt-optimize
+tags: [prompt, meta, workflow]
+depends_on:
+  skills: [prompt-optimizer]
+  agents: [prompt-engineer]
+  commands: []
+
+description: Rewrite a user prompt for clarity and recommend which framework components should handle it. Advisory only.
+
+parameters:
+  - name: prompt
+    type: string
+    required: true
+    description: The prompt to optimize
+  - name: target_model
+    type: string
+    required: false
+    description: Model the prompt will run against
+    default: claude-opus
+
+steps:
+  - agent: design/architect
+    action: "Analyze the prompt '{{prompt}}' for ambiguity, missing constraints, missing success criteria, and unnecessary verbosity."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Recommend which skills, agents, or commands should handle this request on {{target_model}}. Explain the routing."
+    await_result: true
+    on_failure: skip
+  - agent: design/architect
+    action: "Produce a ready-to-run optimized prompt. Do NOT execute the task. If the user wanted execution, tell them to send a normal request."
+    await_result: true
+    on_failure: abort

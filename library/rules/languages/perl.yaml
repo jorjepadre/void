@@ -1,0 +1,43 @@
+id: languages/perl
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Always use strict and use warnings at the top of every file"
+      - "Declare a minimum Perl version with 'use v5.xx'"
+      - "Use snake_case for subroutines and variables, PascalCase for package names"
+      - "Run perltidy and perlcritic as part of the workflow"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Prefer lexical my variables; avoid package globals"
+      - "Use references rather than passing arrays and hashes directly"
+      - "Use three-argument open with lexical filehandles and check its return value"
+      - "Prefer modules from CPAN over reinventing well-solved problems"
+
+  oop:
+    weight: 10
+    rules:
+      - "Use Moose or Moo for object-oriented code"
+      - "Declare attributes with accessors rather than manipulating hashes directly"
+      - "Keep roles focused and compose them for shared behavior"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Use Try::Tiny or modern try/catch for exception handling"
+      - "Throw exception objects rather than plain strings for complex error cases"
+      - "Check return values from system calls and external commands"
+      - "Localize $@ when evaluating blocks that may set it"
+
+  structure:
+    weight: 10
+    rules:
+      - "Manage dependencies with a cpanfile and a lockfile"
+      - "Distribute code as proper CPAN-style modules where reuse matters"
+      - "Write tests with Test::More or Test2::V0"

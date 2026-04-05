@@ -1,0 +1,44 @@
+id: languages/kotlin
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Use camelCase for functions and properties, PascalCase for classes"
+      - "Prefer val over var; favor immutability"
+      - "Use expression bodies for single-expression functions"
+
+  null_safety:
+    weight: 10
+    rules:
+      - "Avoid the !! operator; handle nulls explicitly"
+      - "Use safe calls (?.) and the Elvis operator (?:) for null-aware code"
+      - "Return non-null types whenever possible"
+      - "Use lateinit sparingly and only for dependencies initialized early"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Use data classes for value objects"
+      - "Use sealed classes or interfaces for closed hierarchies"
+      - "Prefer extension functions over utility classes"
+      - "Use scope functions (let, run, apply, also, with) purposefully; do not nest them"
+      - "Use object declarations for singletons"
+
+  coroutines:
+    weight: 10
+    rules:
+      - "Prefer structured concurrency; scope coroutines to a lifecycle"
+      - "Choose dispatchers appropriately (IO, Default, Main)"
+      - "Handle cancellation cooperatively in long-running work"
+      - "Propagate CoroutineContext rather than capturing global scopes"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Use Result or sealed error types for expected failures"
+      - "Throw exceptions for unexpected programmer errors"
+      - "Avoid catching Throwable"

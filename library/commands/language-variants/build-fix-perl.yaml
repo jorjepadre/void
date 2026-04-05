@@ -1,0 +1,37 @@
+id: language-variants/build-fix-perl
+name: Build Fix (Perl)
+version: "1.0.0"
+slash_command: /build-fix-perl
+tags: [build, debugging, perl]
+depends_on:
+  skills: [languages/perl/patterns, build/resolver-perl]
+  agents: [build-resolver-perl]
+  commands: []
+
+description: Incrementally fix Perl build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-generic
+    action: "Run `perl -c` and capture all diagnostics. Also run `perlcritic -5` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Fix one error at a time for typical Perl issues (strict refs violation, undefined subroutine, bareword not allowed, syntax error near unexpected). Apply minimal edits, re-run `perl -c` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-generic
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

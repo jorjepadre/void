@@ -1,0 +1,44 @@
+id: languages/python
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Follow PEP 8 for formatting and naming"
+      - "Use snake_case for functions and variables, PascalCase for classes, UPPER_SNAKE for constants"
+      - "Keep lines within the project's configured length limit"
+      - "Use an automated formatter such as black or ruff format"
+
+  typing:
+    weight: 10
+    rules:
+      - "Add type hints to public functions and methods"
+      - "Prefer built-in generics (list, dict) on Python 3.9+ over typing aliases"
+      - "Use Optional or the X | None syntax explicitly rather than implicit None"
+      - "Run a static type checker on the codebase"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Use f-strings for string interpolation"
+      - "Use context managers for resources that need cleanup"
+      - "Prefer generators and comprehensions for transformations over manual loops"
+      - "Use dataclasses or Pydantic models for structured data"
+      - "Iterate with enumerate and zip rather than index arithmetic"
+
+  structure:
+    weight: 10
+    rules:
+      - "Isolate dependencies with virtual environments"
+      - "Pin runtime dependencies and separate dev dependencies"
+      - "Guard executable scripts with if __name__ == '__main__'"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Catch specific exceptions, never bare except"
+      - "Raise custom exceptions for domain-specific failures"
+      - "Use finally or context managers to guarantee cleanup"

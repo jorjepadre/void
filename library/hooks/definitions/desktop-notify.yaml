@@ -1,0 +1,8 @@
+id: desktop-notify
+event: Stop
+priority: 1
+timeout_ms: 2000
+command: "void hook run desktop-notify"
+description: Sends a desktop notification when the agent finishes a run.
+profiles: [strict]
+enabled: true

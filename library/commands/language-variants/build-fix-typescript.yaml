@@ -1,0 +1,37 @@
+id: language-variants/build-fix-typescript
+name: Build Fix (TypeScript)
+version: "1.0.0"
+slash_command: /build-fix-typescript
+tags: [build, debugging, typescript]
+depends_on:
+  skills: [languages/typescript/patterns, build/resolver-typescript]
+  agents: [build-resolver-typescript]
+  commands: []
+
+description: Incrementally fix TypeScript build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-typescript
+    action: "Run `npx tsc --noEmit && npm run build` and capture all diagnostics. Also run `npm run lint` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-typescript
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-typescript
+    action: "Fix one error at a time for typical TypeScript issues (TS2322 type mismatch, TS2339 property missing, TS7006 implicit any). Apply minimal edits, re-run `npx tsc --noEmit && npm run build` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-typescript
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

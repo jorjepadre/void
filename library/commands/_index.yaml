@@ -1,0 +1,383 @@
+# Void Commands Catalog
+# 75 commands: 15 workflows + 60 language variants
+
+version: "1.0.0"
+
+workflows:
+  - id: workflows/tdd
+    path: workflows/tdd.yaml
+    slash_command: /tdd
+    language: null
+    tags: [testing, tdd, workflow, quality]
+  - id: workflows/plan
+    path: workflows/plan.yaml
+    slash_command: /plan
+    language: null
+    tags: [planning, architecture, workflow]
+  - id: workflows/code-review
+    path: workflows/code-review.yaml
+    slash_command: /code-review
+    language: null
+    tags: [review, quality, security, workflow]
+  - id: workflows/build-fix
+    path: workflows/build-fix.yaml
+    slash_command: /build-fix
+    language: null
+    tags: [build, debugging, workflow]
+  - id: workflows/e2e
+    path: workflows/e2e.yaml
+    slash_command: /e2e
+    language: null
+    tags: [testing, e2e, playwright, workflow]
+  - id: workflows/checkpoint
+    path: workflows/checkpoint.yaml
+    slash_command: /checkpoint
+    language: null
+    tags: [workflow, session, git]
+  - id: workflows/deploy
+    path: workflows/deploy.yaml
+    slash_command: /deploy
+    language: null
+    tags: [deploy, release, workflow]
+  - id: workflows/refactor
+    path: workflows/refactor.yaml
+    slash_command: /refactor
+    language: null
+    tags: [refactor, quality, workflow]
+  - id: workflows/security-scan
+    path: workflows/security-scan.yaml
+    slash_command: /security-scan
+    language: null
+    tags: [security, audit, workflow]
+  - id: workflows/doc-update
+    path: workflows/doc-update.yaml
+    slash_command: /doc-update
+    language: null
+    tags: [docs, workflow]
+  - id: workflows/deep-research
+    path: workflows/deep-research.yaml
+    slash_command: /deep-research
+    language: null
+    tags: [research, analysis, workflow]
+  - id: workflows/performance-audit
+    path: workflows/performance-audit.yaml
+    slash_command: /performance-audit
+    language: null
+    tags: [performance, profiling, workflow]
+  - id: workflows/evolve
+    path: workflows/evolve.yaml
+    slash_command: /evolve
+    language: null
+    tags: [learning, meta, workflow]
+  - id: workflows/context-budget
+    path: workflows/context-budget.yaml
+    slash_command: /context-budget
+    language: null
+    tags: [context, optimization, meta, workflow]
+  - id: workflows/prompt-optimize
+    path: workflows/prompt-optimize.yaml
+    slash_command: /prompt-optimize
+    language: null
+    tags: [prompt, meta, workflow]
+
+language_variants:
+  - id: language-variants/tdd-typescript
+    path: language-variants/tdd-typescript.yaml
+    slash_command: /tdd-typescript
+    language: typescript
+    tags: [tdd, typescript, language-variant]
+  - id: language-variants/tdd-python
+    path: language-variants/tdd-python.yaml
+    slash_command: /tdd-python
+    language: python
+    tags: [tdd, python, language-variant]
+  - id: language-variants/tdd-go
+    path: language-variants/tdd-go.yaml
+    slash_command: /tdd-go
+    language: go
+    tags: [tdd, go, language-variant]
+  - id: language-variants/tdd-rust
+    path: language-variants/tdd-rust.yaml
+    slash_command: /tdd-rust
+    language: rust
+    tags: [tdd, rust, language-variant]
+  - id: language-variants/tdd-java
+    path: language-variants/tdd-java.yaml
+    slash_command: /tdd-java
+    language: java
+    tags: [tdd, java, language-variant]
+  - id: language-variants/tdd-kotlin
+    path: language-variants/tdd-kotlin.yaml
+    slash_command: /tdd-kotlin
+    language: kotlin
+    tags: [tdd, kotlin, language-variant]
+  - id: language-variants/tdd-swift
+    path: language-variants/tdd-swift.yaml
+    slash_command: /tdd-swift
+    language: swift
+    tags: [tdd, swift, language-variant]
+  - id: language-variants/tdd-cpp
+    path: language-variants/tdd-cpp.yaml
+    slash_command: /tdd-cpp
+    language: cpp
+    tags: [tdd, cpp, language-variant]
+  - id: language-variants/tdd-csharp
+    path: language-variants/tdd-csharp.yaml
+    slash_command: /tdd-csharp
+    language: csharp
+    tags: [tdd, csharp, language-variant]
+  - id: language-variants/tdd-dart
+    path: language-variants/tdd-dart.yaml
+    slash_command: /tdd-dart
+    language: dart
+    tags: [tdd, dart, language-variant]
+  - id: language-variants/tdd-php
+    path: language-variants/tdd-php.yaml
+    slash_command: /tdd-php
+    language: php
+    tags: [tdd, php, language-variant]
+  - id: language-variants/tdd-perl
+    path: language-variants/tdd-perl.yaml
+    slash_command: /tdd-perl
+    language: perl
+    tags: [tdd, perl, language-variant]
+  - id: language-variants/build-fix-typescript
+    path: language-variants/build-fix-typescript.yaml
+    slash_command: /build-fix-typescript
+    language: typescript
+    tags: [build_fix, typescript, language-variant]
+  - id: language-variants/build-fix-python
+    path: language-variants/build-fix-python.yaml
+    slash_command: /build-fix-python
+    language: python
+    tags: [build_fix, python, language-variant]
+  - id: language-variants/build-fix-go
+    path: language-variants/build-fix-go.yaml
+    slash_command: /build-fix-go
+    language: go
+    tags: [build_fix, go, language-variant]
+  - id: language-variants/build-fix-rust
+    path: language-variants/build-fix-rust.yaml
+    slash_command: /build-fix-rust
+    language: rust
+    tags: [build_fix, rust, language-variant]
+  - id: language-variants/build-fix-java
+    path: language-variants/build-fix-java.yaml
+    slash_command: /build-fix-java
+    language: java
+    tags: [build_fix, java, language-variant]
+  - id: language-variants/build-fix-kotlin
+    path: language-variants/build-fix-kotlin.yaml
+    slash_command: /build-fix-kotlin
+    language: kotlin
+    tags: [build_fix, kotlin, language-variant]
+  - id: language-variants/build-fix-swift
+    path: language-variants/build-fix-swift.yaml
+    slash_command: /build-fix-swift
+    language: swift
+    tags: [build_fix, swift, language-variant]
+  - id: language-variants/build-fix-cpp
+    path: language-variants/build-fix-cpp.yaml
+    slash_command: /build-fix-cpp
+    language: cpp
+    tags: [build_fix, cpp, language-variant]
+  - id: language-variants/build-fix-csharp
+    path: language-variants/build-fix-csharp.yaml
+    slash_command: /build-fix-csharp
+    language: csharp
+    tags: [build_fix, csharp, language-variant]
+  - id: language-variants/build-fix-dart
+    path: language-variants/build-fix-dart.yaml
+    slash_command: /build-fix-dart
+    language: dart
+    tags: [build_fix, dart, language-variant]
+  - id: language-variants/build-fix-php
+    path: language-variants/build-fix-php.yaml
+    slash_command: /build-fix-php
+    language: php
+    tags: [build_fix, php, language-variant]
+  - id: language-variants/build-fix-perl
+    path: language-variants/build-fix-perl.yaml
+    slash_command: /build-fix-perl
+    language: perl
+    tags: [build_fix, perl, language-variant]
+  - id: language-variants/code-review-typescript
+    path: language-variants/code-review-typescript.yaml
+    slash_command: /code-review-typescript
+    language: typescript
+    tags: [code_review, typescript, language-variant]
+  - id: language-variants/code-review-python
+    path: language-variants/code-review-python.yaml
+    slash_command: /code-review-python
+    language: python
+    tags: [code_review, python, language-variant]
+  - id: language-variants/code-review-go
+    path: language-variants/code-review-go.yaml
+    slash_command: /code-review-go
+    language: go
+    tags: [code_review, go, language-variant]
+  - id: language-variants/code-review-rust
+    path: language-variants/code-review-rust.yaml
+    slash_command: /code-review-rust
+    language: rust
+    tags: [code_review, rust, language-variant]
+  - id: language-variants/code-review-java
+    path: language-variants/code-review-java.yaml
+    slash_command: /code-review-java
+    language: java
+    tags: [code_review, java, language-variant]
+  - id: language-variants/code-review-kotlin
+    path: language-variants/code-review-kotlin.yaml
+    slash_command: /code-review-kotlin
+    language: kotlin
+    tags: [code_review, kotlin, language-variant]
+  - id: language-variants/code-review-swift
+    path: language-variants/code-review-swift.yaml
+    slash_command: /code-review-swift
+    language: swift
+    tags: [code_review, swift, language-variant]
+  - id: language-variants/code-review-cpp
+    path: language-variants/code-review-cpp.yaml
+    slash_command: /code-review-cpp
+    language: cpp
+    tags: [code_review, cpp, language-variant]
+  - id: language-variants/code-review-csharp
+    path: language-variants/code-review-csharp.yaml
+    slash_command: /code-review-csharp
+    language: csharp
+    tags: [code_review, csharp, language-variant]
+  - id: language-variants/code-review-dart
+    path: language-variants/code-review-dart.yaml
+    slash_command: /code-review-dart
+    language: dart
+    tags: [code_review, dart, language-variant]
+  - id: language-variants/code-review-php
+    path: language-variants/code-review-php.yaml
+    slash_command: /code-review-php
+    language: php
+    tags: [code_review, php, language-variant]
+  - id: language-variants/code-review-perl
+    path: language-variants/code-review-perl.yaml
+    slash_command: /code-review-perl
+    language: perl
+    tags: [code_review, perl, language-variant]
+  - id: language-variants/test-typescript
+    path: language-variants/test-typescript.yaml
+    slash_command: /test-typescript
+    language: typescript
+    tags: [test, typescript, language-variant]
+  - id: language-variants/test-python
+    path: language-variants/test-python.yaml
+    slash_command: /test-python
+    language: python
+    tags: [test, python, language-variant]
+  - id: language-variants/test-go
+    path: language-variants/test-go.yaml
+    slash_command: /test-go
+    language: go
+    tags: [test, go, language-variant]
+  - id: language-variants/test-rust
+    path: language-variants/test-rust.yaml
+    slash_command: /test-rust
+    language: rust
+    tags: [test, rust, language-variant]
+  - id: language-variants/test-java
+    path: language-variants/test-java.yaml
+    slash_command: /test-java
+    language: java
+    tags: [test, java, language-variant]
+  - id: language-variants/test-kotlin
+    path: language-variants/test-kotlin.yaml
+    slash_command: /test-kotlin
+    language: kotlin
+    tags: [test, kotlin, language-variant]
+  - id: language-variants/test-swift
+    path: language-variants/test-swift.yaml
+    slash_command: /test-swift
+    language: swift
+    tags: [test, swift, language-variant]
+  - id: language-variants/test-cpp
+    path: language-variants/test-cpp.yaml
+    slash_command: /test-cpp
+    language: cpp
+    tags: [test, cpp, language-variant]
+  - id: language-variants/test-csharp
+    path: language-variants/test-csharp.yaml
+    slash_command: /test-csharp
+    language: csharp
+    tags: [test, csharp, language-variant]
+  - id: language-variants/test-dart
+    path: language-variants/test-dart.yaml
+    slash_command: /test-dart
+    language: dart
+    tags: [test, dart, language-variant]
+  - id: language-variants/test-php
+    path: language-variants/test-php.yaml
+    slash_command: /test-php
+    language: php
+    tags: [test, php, language-variant]
+  - id: language-variants/test-perl
+    path: language-variants/test-perl.yaml
+    slash_command: /test-perl
+    language: perl
+    tags: [test, perl, language-variant]
+  - id: language-variants/refactor-typescript
+    path: language-variants/refactor-typescript.yaml
+    slash_command: /refactor-typescript
+    language: typescript
+    tags: [refactor, typescript, language-variant]
+  - id: language-variants/refactor-python
+    path: language-variants/refactor-python.yaml
+    slash_command: /refactor-python
+    language: python
+    tags: [refactor, python, language-variant]
+  - id: language-variants/refactor-go
+    path: language-variants/refactor-go.yaml
+    slash_command: /refactor-go
+    language: go
+    tags: [refactor, go, language-variant]
+  - id: language-variants/refactor-rust
+    path: language-variants/refactor-rust.yaml
+    slash_command: /refactor-rust
+    language: rust
+    tags: [refactor, rust, language-variant]
+  - id: language-variants/refactor-java
+    path: language-variants/refactor-java.yaml
+    slash_command: /refactor-java
+    language: java
+    tags: [refactor, java, language-variant]
+  - id: language-variants/refactor-kotlin
+    path: language-variants/refactor-kotlin.yaml
+    slash_command: /refactor-kotlin
+    language: kotlin
+    tags: [refactor, kotlin, language-variant]
+  - id: language-variants/refactor-swift
+    path: language-variants/refactor-swift.yaml
+    slash_command: /refactor-swift
+    language: swift
+    tags: [refactor, swift, language-variant]
+  - id: language-variants/refactor-cpp
+    path: language-variants/refactor-cpp.yaml
+    slash_command: /refactor-cpp
+    language: cpp
+    tags: [refactor, cpp, language-variant]
+  - id: language-variants/refactor-csharp
+    path: language-variants/refactor-csharp.yaml
+    slash_command: /refactor-csharp
+    language: csharp
+    tags: [refactor, csharp, language-variant]
+  - id: language-variants/refactor-dart
+    path: language-variants/refactor-dart.yaml
+    slash_command: /refactor-dart
+    language: dart
+    tags: [refactor, dart, language-variant]
+  - id: language-variants/refactor-php
+    path: language-variants/refactor-php.yaml
+    slash_command: /refactor-php
+    language: php
+    tags: [refactor, php, language-variant]
+  - id: language-variants/refactor-perl
+    path: language-variants/refactor-perl.yaml
+    slash_command: /refactor-perl
+    language: perl
+    tags: [refactor, perl, language-variant]

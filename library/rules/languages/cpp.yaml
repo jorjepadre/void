@@ -1,0 +1,43 @@
+id: languages/cpp
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Target modern C++ (C++17 or later) and prefer its idioms"
+      - "Follow a consistent project style (Google, LLVM, or Core Guidelines)"
+      - "Use nullptr instead of NULL or 0"
+      - "Use auto where it improves clarity without obscuring types"
+
+  memory:
+    weight: 10
+    rules:
+      - "Manage resources with RAII; acquire in constructors, release in destructors"
+      - "Prefer std::unique_ptr for sole ownership and std::shared_ptr only when shared ownership is necessary"
+      - "Avoid raw new and delete in application code"
+      - "Use std::make_unique and std::make_shared to construct smart pointers"
+
+  correctness:
+    weight: 10
+    rules:
+      - "Apply const correctness to parameters, methods, and variables"
+      - "Mark single-argument constructors explicit to prevent unintended conversions"
+      - "Prefer references over pointers when the value must be present"
+      - "Use enum class for strongly-typed enumerations"
+
+  move_semantics:
+    weight: 10
+    rules:
+      - "Enable move semantics by implementing or defaulting move constructors and assignment"
+      - "Pass large objects by const reference; accept sinks by value and std::move"
+      - "Follow the rule of zero; let the compiler generate special members when possible"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Use exceptions for exceptional conditions, not control flow"
+      - "Use std::optional, std::expected, or status types for recoverable failures"
+      - "Never throw from destructors"

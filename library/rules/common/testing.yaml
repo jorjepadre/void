@@ -1,0 +1,37 @@
+id: common/testing
+layer: common
+specificity: 0
+extends: null
+
+sections:
+  coverage:
+    weight: 10
+    rules:
+      - "Cover critical paths and business logic thoroughly"
+      - "Aim for meaningful coverage, not a coverage percentage for its own sake"
+      - "Write regression tests for every bug fix"
+      - "Test edge cases, error paths, and boundary conditions"
+
+  structure:
+    weight: 10
+    rules:
+      - "Follow the testing pyramid: many unit tests, fewer integration tests, few end-to-end tests"
+      - "Keep unit tests fast, isolated, and deterministic"
+      - "Use integration tests for boundaries between components"
+      - "Reserve end-to-end tests for critical user journeys"
+
+  naming:
+    weight: 10
+    rules:
+      - "Name tests to describe the behavior under test and the expected outcome"
+      - "Use the Arrange-Act-Assert pattern to structure test bodies"
+      - "Group related tests under descriptive suites"
+
+  quality:
+    weight: 10
+    rules:
+      - "A failing test should point directly to the problem"
+      - "Avoid shared mutable state between tests"
+      - "Prefer fakes and stubs over heavy mocking frameworks when practical"
+      - "Do not test private implementation details; test observable behavior"
+      - "Treat flaky tests as bugs and fix them immediately"

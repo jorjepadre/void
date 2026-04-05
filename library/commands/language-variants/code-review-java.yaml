@@ -1,0 +1,36 @@
+id: language-variants/code-review-java
+name: Code Review (Java)
+version: "1.0.0"
+slash_command: /code-review-java
+tags: [review, quality, java]
+depends_on:
+  skills: [languages/java/patterns, code-quality/reviewer-java, security/scanner]
+  agents: [reviewer-java]
+  commands: []
+
+description: Java-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-java
+    action: "Gather changed Java files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-java
+    action: "Run static analysis: `mvn spotbugs:check || ./gradlew check`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-java
+    action: "Manual review pass for Java. Check idiomatic patterns (immutable fields, Optional over null, streams, proper equals/hashCode), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-java
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

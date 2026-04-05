@@ -1,0 +1,113 @@
+version: 1
+description: Catalog of Void hook definitions and profiles
+profiles:
+  - name: minimal
+    path: profiles/minimal.yaml
+    description: Only critical security hooks
+  - name: standard
+    path: profiles/standard.yaml
+    description: Balanced — security plus quality gates
+  - name: strict
+    path: profiles/strict.yaml
+    description: All hooks active
+hooks:
+  - id: secret-detection
+    path: definitions/secret-detection.yaml
+    event: PreToolUse
+    priority: 1000
+    profiles: [minimal, standard, strict]
+  - id: dangerous-command-block
+    path: definitions/dangerous-command-block.yaml
+    event: PreToolUse
+    priority: 1000
+    profiles: [minimal, standard, strict]
+  - id: no-verify-block
+    path: definitions/no-verify-block.yaml
+    event: PreToolUse
+    priority: 950
+    profiles: [minimal, standard, strict]
+  - id: config-protection
+    path: definitions/config-protection.yaml
+    event: PreToolUse
+    priority: 900
+    profiles: [standard, strict]
+  - id: mcp-health
+    path: definitions/mcp-health.yaml
+    event: PreToolUse
+    priority: 800
+    profiles: [standard, strict]
+  - id: dev-server-block
+    path: definitions/dev-server-block.yaml
+    event: PreToolUse
+    priority: 600
+    profiles: [strict]
+  - id: git-push-review
+    path: definitions/git-push-review.yaml
+    event: PreToolUse
+    priority: 500
+    profiles: [strict]
+  - id: doc-file-warning
+    path: definitions/doc-file-warning.yaml
+    event: PreToolUse
+    priority: 100
+    profiles: [strict]
+  - id: auto-format
+    path: definitions/auto-format.yaml
+    event: PostToolUse
+    priority: 50
+    profiles: [strict]
+  - id: type-check
+    path: definitions/type-check.yaml
+    event: PostToolUse
+    priority: 40
+    profiles: [standard, strict]
+  - id: lint-check
+    path: definitions/lint-check.yaml
+    event: PostToolUse
+    priority: 30
+    profiles: [standard, strict]
+  - id: console-removal
+    path: definitions/console-removal.yaml
+    event: PostToolUse
+    priority: 20
+    profiles: [standard, strict]
+  - id: build-analysis
+    path: definitions/build-analysis.yaml
+    event: PostToolUse
+    priority: 15
+    profiles: [strict]
+  - id: design-quality
+    path: definitions/design-quality.yaml
+    event: PostToolUse
+    priority: 10
+    profiles: [strict]
+  - id: pr-created-log
+    path: definitions/pr-created-log.yaml
+    event: PostToolUse
+    priority: 5
+    profiles: [standard, strict]
+  - id: governance-capture
+    path: definitions/governance-capture.yaml
+    event: PostToolUse
+    priority: 1
+    profiles: [strict]
+  - id: post-edit-accumulate
+    path: definitions/post-edit-accumulate.yaml
+    event: PostToolUse
+    priority: 1
+    profiles: [strict]
+  - id: suggest-compact
+    path: definitions/suggest-compact.yaml
+    event: PreCompact
+    priority: 1
+    profiles: [standard, strict]
+  - id: cost-tracker
+    path: definitions/cost-tracker.yaml
+    event: Stop
+    priority: 2
+    profiles: [standard, strict]
+  - id: desktop-notify
+    path: definitions/desktop-notify.yaml
+    event: Stop
+    priority: 1
+    profiles: [strict]

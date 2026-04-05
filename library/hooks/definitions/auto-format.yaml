@@ -1,0 +1,11 @@
+id: auto-format
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+  file_path: "**/*.{ts,tsx,js,jsx,py,go,rs,java,kt}"
+priority: 50
+timeout_ms: 10000
+command: "void hook run auto-format"
+description: Runs project formatter on edited source files (prettier, gofmt, rustfmt, ruff, etc.).
+profiles: [strict]
+enabled: true

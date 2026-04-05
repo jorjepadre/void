@@ -1,0 +1,37 @@
+id: language-variants/build-fix-php
+name: Build Fix (PHP)
+version: "1.0.0"
+slash_command: /build-fix-php
+tags: [build, debugging, php]
+depends_on:
+  skills: [languages/php/patterns, build/resolver-php]
+  agents: [build-resolver-php]
+  commands: []
+
+description: Incrementally fix PHP build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-generic
+    action: "Run `composer install && php -l` and capture all diagnostics. Also run `./vendor/bin/phpstan analyse && ./vendor/bin/php-cs-fixer fix --dry-run` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Fix one error at a time for typical PHP issues (undefined index, fatal class not found, type hint mismatch, PHPStan level errors). Apply minimal edits, re-run `composer install && php -l` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-generic
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

@@ -1,0 +1,37 @@
+id: language-variants/build-fix-go
+name: Build Fix (Go)
+version: "1.0.0"
+slash_command: /build-fix-go
+tags: [build, debugging, go]
+depends_on:
+  skills: [languages/go/patterns, build/resolver-go]
+  agents: [build-resolver-go]
+  commands: []
+
+description: Incrementally fix Go build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-go
+    action: "Run `go build ./... && go vet ./...` and capture all diagnostics. Also run `go vet ./... && staticcheck ./... && golangci-lint run` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-go
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-go
+    action: "Fix one error at a time for typical Go issues (undefined reference, type mismatch, missing return, import cycle, declared but not used). Apply minimal edits, re-run `go build ./... && go vet ./...` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-go
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

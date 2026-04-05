@@ -1,0 +1,43 @@
+id: languages/rust
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Format with rustfmt and fix clippy warnings before committing"
+      - "Use snake_case for functions and variables, PascalCase for types, SCREAMING_SNAKE_CASE for constants"
+      - "Organize code into modules that mirror the problem domain"
+
+  ownership:
+    weight: 10
+    rules:
+      - "Prefer borrowing over cloning; clone only when ownership transfer is impossible"
+      - "Use references with explicit lifetimes when they aid clarity"
+      - "Avoid Rc and RefCell until a single-owner design proves insufficient"
+      - "Prefer iterators over index-based loops"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Return Result for recoverable failures and Option for absence"
+      - "Propagate errors with the ? operator"
+      - "Define domain error enums and implement std::error::Error"
+      - "Use unwrap and expect only in tests or when invariants guarantee success"
+      - "Provide expect messages that describe the invariant"
+
+  unsafe:
+    weight: 10
+    rules:
+      - "Avoid unsafe; when required, isolate it behind a safe API"
+      - "Document every unsafe block with the invariants it upholds"
+      - "Keep unsafe blocks as small as possible"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Prefer match and if let over manual Option and Result inspection"
+      - "Use traits for polymorphism and derive standard ones when appropriate"
+      - "Favor composition with structs over deep trait hierarchies"

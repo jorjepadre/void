@@ -1,0 +1,41 @@
+id: language-variants/test-go
+name: Test Suite (Go)
+version: "1.0.0"
+slash_command: /test-go
+tags: [testing, go]
+depends_on:
+  skills: [languages/go/testing, testing/coverage]
+  agents: [test-runner-go]
+  commands: []
+
+description: Run Go tests with testing package with table-driven tests, report coverage, and surface flake risk.
+
+parameters:
+  - name: scope
+    type: string
+    required: false
+    description: Test path, package, or blank for all
+    default: ""
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/test-analyst
+    action: "Run `go test ./...` scoped to {{scope}} (blank = full). Capture pass/fail counts and durations."
+    await_result: true
+    on_failure: abort
+  - agent: testing/test-analyst
+    action: "For failures, read the failing test and the code under test. Classify as: legitimate bug, test bug, or flake. Propose fixes."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Run `go test -cover ./...`. Report per-file coverage and flag files below {{coverage_target}}%."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Emit summary: passed, failed, flaky, coverage delta, and recommended next actions for Go."
+    await_result: true
+    on_failure: skip

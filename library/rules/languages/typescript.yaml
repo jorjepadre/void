@@ -1,0 +1,37 @@
+id: languages/typescript
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  typing:
+    weight: 10
+    rules:
+      - "Enable strict mode in tsconfig including noImplicitAny and strictNullChecks"
+      - "Avoid the any type; use unknown and narrow before use"
+      - "Prefer type inference for local variables and explicit types at public boundaries"
+      - "Use readonly for immutable properties and ReadonlyArray for immutable lists"
+      - "Model variants with discriminated unions rather than loose flags"
+      - "Prefer interfaces for object shapes and type aliases for unions and primitives"
+
+  naming:
+    weight: 10
+    rules:
+      - "Use camelCase for variables and functions, PascalCase for types and classes"
+      - "Use SCREAMING_SNAKE_CASE only for true compile-time constants"
+      - "Do not prefix interfaces with I"
+
+  structure:
+    weight: 10
+    rules:
+      - "Prefer named exports over default exports"
+      - "Keep modules focused; one primary export per file where practical"
+      - "Use ES modules consistently and avoid CommonJS mixing"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Use typed errors or Result-style returns for expected failures"
+      - "Never swallow errors silently; rethrow or log with context"
+      - "Await every Promise or explicitly mark with void"
+      - "Avoid non-null assertions; narrow types instead"

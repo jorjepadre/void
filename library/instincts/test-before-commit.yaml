@@ -1,0 +1,14 @@
+id: builtin/test-before-commit
+name: Test Before Commit
+description: Run the project test suite before creating a commit
+version: "1.0.0"
+trigger:
+  type: event
+  condition: "pre_commit"
+  parameters:
+    applies_to: git_commit
+confidence: 0.85
+domain_tags: [git, testing, quality]
+action: "Execute the project test runner (npm test / pytest / go test / cargo test) and block the commit if any test fails. Surface failing test names to the user before asking whether to proceed."
+created_at: "2026-04-05T00:00:00Z"
+usage_count: 0

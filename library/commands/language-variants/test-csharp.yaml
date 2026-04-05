@@ -1,0 +1,41 @@
+id: language-variants/test-csharp
+name: Test Suite (C#)
+version: "1.0.0"
+slash_command: /test-csharp
+tags: [testing, csharp]
+depends_on:
+  skills: [languages/csharp/testing, testing/coverage]
+  agents: [test-runner-csharp]
+  commands: []
+
+description: Run C# tests with xUnit with FluentAssertions and Moq, report coverage, and surface flake risk.
+
+parameters:
+  - name: scope
+    type: string
+    required: false
+    description: Test path, package, or blank for all
+    default: ""
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/test-analyst
+    action: "Run `dotnet test` scoped to {{scope}} (blank = full). Capture pass/fail counts and durations."
+    await_result: true
+    on_failure: abort
+  - agent: testing/test-analyst
+    action: "For failures, read the failing test and the code under test. Classify as: legitimate bug, test bug, or flake. Propose fixes."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Run `dotnet test /p:CollectCoverage=true`. Report per-file coverage and flag files below {{coverage_target}}%."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Emit summary: passed, failed, flaky, coverage delta, and recommended next actions for C#."
+    await_result: true
+    on_failure: skip

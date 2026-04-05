@@ -1,0 +1,15 @@
+version: 1
+description: Catalog of Void built-in instincts
+instincts:
+  - id: builtin/conventional-commits
+    path: conventional-commits.yaml
+    domain_tags: [git, commits, conventions]
+  - id: builtin/test-before-commit
+    path: test-before-commit.yaml
+    domain_tags: [git, testing, quality]
+  - id: builtin/type-safe-defaults
+    path: type-safe-defaults.yaml
+    domain_tags: [typescript, types, safety]
+  - id: builtin/security-first
+    path: security-first.yaml
+    domain_tags: [security, secrets, input-validation]

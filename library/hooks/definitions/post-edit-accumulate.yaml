@@ -1,0 +1,10 @@
+id: post-edit-accumulate
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+priority: 1
+timeout_ms: 1000
+command: "void hook run post-edit-accumulate"
+description: Accumulates edited file paths across a session for batched downstream processing.
+profiles: [strict]
+enabled: true

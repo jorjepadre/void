@@ -1,0 +1,8 @@
+id: suggest-compact
+event: PreCompact
+priority: 1
+timeout_ms: 2000
+command: "void hook run suggest-compact"
+description: Emits compaction guidance — what to preserve, what to drop — before context compaction runs.
+profiles: [standard, strict]
+enabled: true

@@ -1,0 +1,46 @@
+id: workflows/deploy
+name: Deployment
+version: "1.0.0"
+slash_command: /deploy
+tags: [deploy, release, workflow]
+depends_on:
+  skills: [deployment/checklist, release/versioning]
+  agents: [deployer]
+  commands: []
+
+description: Run pre-flight checks, build artifacts, deploy to the target environment, and verify health.
+
+parameters:
+  - name: environment
+    type: enum
+    required: true
+    description: Deployment target
+    values: [dev, staging, production]
+  - name: version
+    type: string
+    required: false
+    description: Version tag or git ref to deploy
+    default: HEAD
+  - name: dry_run
+    type: boolean
+    required: false
+    description: Simulate the deploy without applying changes
+    default: false
+
+steps:
+  - agent: design/architect
+    action: "Pre-flight checks for {{environment}} at {{version}}: clean working tree, tests green, build passes, required secrets present, migrations reviewed."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Build release artifacts for {{version}}. Tag the build and record a deploy manifest."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Deploy {{version}} to {{environment}} (dry_run={{dry_run}}). Apply migrations before the app cutover. Roll traffic gradually where supported."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Post-deploy verification on {{environment}}: health checks, smoke tests, error rate delta, latency delta. If any check fails, prepare a rollback plan."
+    await_result: true
+    on_failure: abort

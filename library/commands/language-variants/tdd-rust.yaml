@@ -1,0 +1,42 @@
+id: language-variants/tdd-rust
+name: TDD (Rust)
+version: "1.0.0"
+slash_command: /tdd-rust
+tags: [testing, tdd, rust]
+depends_on:
+  skills: [languages/rust/patterns, languages/rust/testing, tdd-workflow]
+  agents: [tdd-guide-rust]
+  commands: []
+
+description: Enforce red-green-refactor TDD for Rust using #[test], rstest, proptest, mockall.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Rust function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in Rust with todo/panic/not-implemented stubs. Write tests using #[test], rstest, proptest, mockall covering happy path, edges, and errors. Run `cargo test` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic Rust (Result over panic, explicit lifetimes, traits over inheritance, no unwrap in libraries). Minimal code only. Re-run `cargo test` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `cargo test` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `cargo llvm-cov --html` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

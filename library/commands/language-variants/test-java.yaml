@@ -1,0 +1,41 @@
+id: language-variants/test-java
+name: Test Suite (Java)
+version: "1.0.0"
+slash_command: /test-java
+tags: [testing, java]
+depends_on:
+  skills: [languages/java/testing, testing/coverage]
+  agents: [test-runner-java]
+  commands: []
+
+description: Run Java tests with JUnit 5 with AssertJ and Mockito, report coverage, and surface flake risk.
+
+parameters:
+  - name: scope
+    type: string
+    required: false
+    description: Test path, package, or blank for all
+    default: ""
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/test-analyst
+    action: "Run `mvn test || ./gradlew test` scoped to {{scope}} (blank = full). Capture pass/fail counts and durations."
+    await_result: true
+    on_failure: abort
+  - agent: testing/test-analyst
+    action: "For failures, read the failing test and the code under test. Classify as: legitimate bug, test bug, or flake. Propose fixes."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Run `mvn jacoco:report || ./gradlew jacocoTestReport`. Report per-file coverage and flag files below {{coverage_target}}%."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Emit summary: passed, failed, flaky, coverage delta, and recommended next actions for Java."
+    await_result: true
+    on_failure: skip

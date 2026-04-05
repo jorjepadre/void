@@ -1,0 +1,48 @@
+id: workflows/deep-research
+name: Deep Research
+version: "1.0.0"
+slash_command: /deep-research
+tags: [research, analysis, workflow]
+depends_on:
+  skills: [research/source-synthesis, research/citation]
+  agents: [researcher]
+  commands: []
+
+description: Multi-source research synthesizing codebase, docs, and web sources into a structured briefing.
+
+parameters:
+  - name: question
+    type: string
+    required: true
+    description: The research question to answer
+  - name: sources
+    type: enum
+    required: false
+    description: Source breadth
+    default: mixed
+    values: [code-only, docs-only, web-only, mixed]
+  - name: depth
+    type: enum
+    required: false
+    description: Research depth
+    default: standard
+    values: [quick, standard, exhaustive]
+
+steps:
+  - agent: research/deep-researcher
+    action: "Decompose '{{question}}' into 3-7 sub-questions. State what 'answered' looks like for each."
+    await_result: true
+    on_failure: abort
+  - agent: research/deep-researcher
+    action: "Gather evidence from {{sources}} at {{depth}} depth. For each sub-question, collect citations with file:line or URL and a one-line quote."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: research/deep-researcher
+    action: "Synthesize findings for '{{question}}'. Note contradictions, confidence level per claim, and gaps in evidence."
+    await_result: true
+    on_failure: abort
+  - agent: research/deep-researcher
+    action: "Deliver a briefing: executive answer, supporting findings with citations, open questions, and recommended next actions."
+    await_result: true
+    on_failure: skip

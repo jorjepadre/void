@@ -1,0 +1,37 @@
+id: workflows/checkpoint
+name: Session Checkpoint
+version: "1.0.0"
+slash_command: /checkpoint
+tags: [workflow, session, git]
+depends_on:
+  skills: [session/checkpoint]
+  agents: [session-manager]
+  commands: []
+
+description: Save progress, create a named checkpoint, or verify the current state against a prior checkpoint.
+
+parameters:
+  - name: action
+    type: enum
+    required: true
+    description: Checkpoint operation
+    values: [create, verify, list, clear]
+  - name: name
+    type: string
+    required: false
+    description: Checkpoint name (required for create/verify)
+    default: ""
+
+steps:
+  - agent: design/architect
+    action: "Run a quick state check: git status, test status, build status. Record the baseline for checkpoint operation '{{action}}' on name '{{name}}'."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Execute {{action}}. For create: write an entry to .void/checkpoints.log with timestamp, name={{name}}, and short SHA. For verify: diff current state vs the stored checkpoint (files changed, tests delta, coverage delta, build status). For list: show all entries with status. For clear: keep only the last 5 entries."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Emit a human-readable summary of the checkpoint result for '{{name}}'."
+    await_result: true
+    on_failure: skip

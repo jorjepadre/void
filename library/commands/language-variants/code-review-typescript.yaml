@@ -1,0 +1,36 @@
+id: language-variants/code-review-typescript
+name: Code Review (TypeScript)
+version: "1.0.0"
+slash_command: /code-review-typescript
+tags: [review, quality, typescript]
+depends_on:
+  skills: [languages/typescript/patterns, code-quality/reviewer-typescript, security/scanner]
+  agents: [reviewer-typescript]
+  commands: []
+
+description: TypeScript-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-typescript
+    action: "Gather changed TypeScript files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-typescript
+    action: "Run static analysis: `npm run lint`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-typescript
+    action: "Manual review pass for TypeScript. Check idiomatic patterns (const, strict null checks, discriminated unions, no any), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-typescript
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

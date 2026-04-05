@@ -1,0 +1,34 @@
+id: common/git-workflow
+layer: common
+specificity: 0
+extends: null
+
+sections:
+  commits:
+    weight: 10
+    rules:
+      - "Follow Conventional Commits: type(scope): subject"
+      - "Use types: feat, fix, docs, style, refactor, perf, test, build, ci, chore"
+      - "Write commit subjects in imperative mood under 72 characters"
+      - "Explain the why in the commit body when the change is non-obvious"
+      - "Make commits atomic: one logical change per commit"
+      - "Never commit secrets, credentials, or generated artifacts"
+
+  branching:
+    weight: 10
+    rules:
+      - "Use short-lived feature branches off main"
+      - "Name branches with a prefix: feat/, fix/, chore/, docs/"
+      - "Keep branch names lowercase with hyphens"
+      - "Rebase feature branches on main before opening a pull request"
+      - "Delete branches after merge"
+
+  pull_requests:
+    weight: 10
+    rules:
+      - "Open pull requests early as drafts for visibility"
+      - "Keep pull requests small and focused; split large changes"
+      - "Write a PR description that covers motivation, approach, and test plan"
+      - "Require at least one review before merging to main"
+      - "Ensure CI passes before requesting review"
+      - "Squash or rebase to keep history linear unless the project dictates otherwise"

@@ -1,0 +1,53 @@
+id: common/security
+layer: common
+specificity: 0
+extends: null
+
+sections:
+  secrets:
+    weight: 10
+    rules:
+      - "Never hardcode secrets, API keys, or credentials in source code"
+      - "Load secrets from environment variables or a dedicated secret manager"
+      - "Rotate credentials regularly and immediately on suspected compromise"
+      - "Keep .env files out of version control"
+
+  input_validation:
+    weight: 10
+    rules:
+      - "Validate all input at trust boundaries"
+      - "Treat user input as untrusted regardless of source"
+      - "Use allowlists over denylists whenever practical"
+      - "Reject malformed input early with clear errors"
+
+  injection:
+    weight: 10
+    rules:
+      - "Use parameterized queries or prepared statements to prevent SQL injection"
+      - "Escape output appropriately for the target context to prevent XSS"
+      - "Never construct shell commands by concatenating user input"
+      - "Sanitize file paths to prevent directory traversal"
+
+  web:
+    weight: 10
+    rules:
+      - "Enforce CSRF protection on state-changing requests"
+      - "Set strict Content Security Policy headers"
+      - "Use HTTPS everywhere and enable HSTS"
+      - "Set secure, HttpOnly, and SameSite flags on cookies"
+
+  dependencies:
+    weight: 10
+    rules:
+      - "Audit dependencies regularly for known vulnerabilities"
+      - "Pin dependency versions and review upgrades"
+      - "Minimize the number of third-party dependencies"
+      - "Remove unused dependencies promptly"
+
+  authentication:
+    weight: 10
+    rules:
+      - "Hash passwords with a modern algorithm such as Argon2 or bcrypt"
+      - "Use established libraries for authentication; do not roll your own"
+      - "Apply the principle of least privilege to all access controls"
+      - "Log security-relevant events without logging secrets"

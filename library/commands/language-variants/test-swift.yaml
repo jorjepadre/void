@@ -1,0 +1,41 @@
+id: language-variants/test-swift
+name: Test Suite (Swift)
+version: "1.0.0"
+slash_command: /test-swift
+tags: [testing, swift]
+depends_on:
+  skills: [languages/swift/testing, testing/coverage]
+  agents: [test-runner-swift]
+  commands: []
+
+description: Run Swift tests with XCTest or Swift Testing, report coverage, and surface flake risk.
+
+parameters:
+  - name: scope
+    type: string
+    required: false
+    description: Test path, package, or blank for all
+    default: ""
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/test-analyst
+    action: "Run `swift test` scoped to {{scope}} (blank = full). Capture pass/fail counts and durations."
+    await_result: true
+    on_failure: abort
+  - agent: testing/test-analyst
+    action: "For failures, read the failing test and the code under test. Classify as: legitimate bug, test bug, or flake. Propose fixes."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Run `swift test --enable-code-coverage`. Report per-file coverage and flag files below {{coverage_target}}%."
+    await_result: true
+    on_failure: skip
+  - agent: testing/test-analyst
+    action: "Emit summary: passed, failed, flaky, coverage delta, and recommended next actions for Swift."
+    await_result: true
+    on_failure: skip

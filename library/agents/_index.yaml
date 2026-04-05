@@ -1,0 +1,191 @@
+version: "1.0.0"
+description: Catalog of Void agent definitions
+
+agents:
+  # code-quality
+  - id: code-quality/reviewer-typescript
+    path: code-quality/reviewer-typescript.yaml
+    category: code-quality
+    language: typescript
+    tags: [code-review, typescript, javascript, type-safety, security]
+  - id: code-quality/reviewer-python
+    path: code-quality/reviewer-python.yaml
+    category: code-quality
+    language: python
+    tags: [code-review, python, type-hints, security]
+  - id: code-quality/reviewer-go
+    path: code-quality/reviewer-go.yaml
+    category: code-quality
+    language: go
+    tags: [code-review, go, concurrency, error-handling]
+  - id: code-quality/reviewer-rust
+    path: code-quality/reviewer-rust.yaml
+    category: code-quality
+    language: rust
+    tags: [code-review, rust, ownership, unsafe, async]
+  - id: code-quality/reviewer-java
+    path: code-quality/reviewer-java.yaml
+    category: code-quality
+    language: java
+    tags: [code-review, java, jvm, concurrency, security]
+  - id: code-quality/reviewer-csharp
+    path: code-quality/reviewer-csharp.yaml
+    category: code-quality
+    language: csharp
+    tags: [code-review, csharp, dotnet, async, security]
+  - id: code-quality/reviewer-cpp
+    path: code-quality/reviewer-cpp.yaml
+    category: code-quality
+    language: cpp
+    tags: [code-review, cpp, memory-safety, undefined-behavior]
+  - id: code-quality/reviewer-generic
+    path: code-quality/reviewer-generic.yaml
+    category: code-quality
+    language: null
+    tags: [code-review, language-agnostic, security]
+
+  # build
+  - id: build/resolver-typescript
+    path: build/resolver-typescript.yaml
+    category: build
+    language: typescript
+    tags: [build-fix, typescript, javascript, error-diagnosis]
+  - id: build/resolver-python
+    path: build/resolver-python.yaml
+    category: build
+    language: python
+    tags: [build-fix, python, packaging, error-diagnosis]
+  - id: build/resolver-go
+    path: build/resolver-go.yaml
+    category: build
+    language: go
+    tags: [build-fix, go, modules, error-diagnosis]
+  - id: build/resolver-rust
+    path: build/resolver-rust.yaml
+    category: build
+    language: rust
+    tags: [build-fix, rust, cargo, error-diagnosis]
+  - id: build/resolver-java
+    path: build/resolver-java.yaml
+    category: build
+    language: java
+    tags: [build-fix, java, maven, gradle, error-diagnosis]
+  - id: build/resolver-kotlin
+    path: build/resolver-kotlin.yaml
+    category: build
+    language: kotlin
+    tags: [build-fix, kotlin, gradle, kmp, error-diagnosis]
+  - id: build/resolver-cpp
+    path: build/resolver-cpp.yaml
+    category: build
+    language: cpp
+    tags: [build-fix, cpp, cmake, linker, error-diagnosis]
+  - id: build/resolver-generic
+    path: build/resolver-generic.yaml
+    category: build
+    language: null
+    tags: [build-fix, language-agnostic, error-diagnosis]
+
+  # design
+  - id: design/architect
+    path: design/architect.yaml
+    category: design
+    language: null
+    tags: [architecture, design, tradeoffs, scalability]
+  - id: design/planner
+    path: design/planner.yaml
+    category: design
+    language: null
+    tags: [planning, task-breakdown, implementation]
+  - id: design/chief-of-staff
+    path: design/chief-of-staff.yaml
+    category: design
+    language: null
+    tags: [coordination, prioritization, triage, strategy]
+
+  # orchestration
+  - id: orchestration/loop-operator
+    path: orchestration/loop-operator.yaml
+    category: orchestration
+    language: null
+    tags: [orchestration, autonomous, monitoring, recovery]
+  - id: orchestration/gan-verifier
+    path: orchestration/gan-verifier.yaml
+    category: orchestration
+    language: null
+    tags: [verification, quality, evaluation, critique]
+  - id: orchestration/coordinator
+    path: orchestration/coordinator.yaml
+    category: orchestration
+    language: null
+    tags: [orchestration, coordination, multi-agent, routing]
+
+  # testing
+  - id: testing/tdd-guide
+    path: testing/tdd-guide.yaml
+    category: testing
+    language: null
+    tags: [testing, tdd, red-green-refactor]
+  - id: testing/e2e-runner
+    path: testing/e2e-runner.yaml
+    category: testing
+    language: null
+    tags: [testing, e2e, browser, integration]
+  - id: testing/test-analyst
+    path: testing/test-analyst.yaml
+    category: testing
+    language: null
+    tags: [testing, coverage, gap-analysis, quality]
+
+  # documentation
+  - id: documentation/doc-updater
+    path: documentation/doc-updater.yaml
+    category: documentation
+    language: null
+    tags: [documentation, maintenance, consistency]
+  - id: documentation/api-documenter
+    path: documentation/api-documenter.yaml
+    category: documentation
+    language: null
+    tags: [documentation, api, reference]
+  - id: documentation/docs-lookup
+    path: documentation/docs-lookup.yaml
+    category: documentation
+    language: null
+    tags: [documentation, search, retrieval, reference]
+
+  # refactoring
+  - id: refactoring/refactor-cleaner
+    path: refactoring/refactor-cleaner.yaml
+    category: refactoring
+    language: null
+    tags: [refactoring, cleanup, code-quality]
+  - id: refactoring/dead-code-remover
+    path: refactoring/dead-code-remover.yaml
+    category: refactoring
+    language: null
+    tags: [refactoring, cleanup, dead-code]
+
+  # security
+  - id: security/security-auditor
+    path: security/security-auditor.yaml
+    category: security
+    language: null
+    tags: [security, vulnerability, audit, threat-model]
+  - id: security/dependency-scanner
+    path: security/dependency-scanner.yaml
+    category: security
+    language: null
+    tags: [security, dependencies, supply-chain, cve]
+
+  # research
+  - id: research/deep-researcher
+    path: research/deep-researcher.yaml
+    category: research
+    language: null
+    tags: [research, multi-source, synthesis, analysis]
+  - id: research/market-analyst
+    path: research/market-analyst.yaml
+    category: research
+    language: null
+    tags: [research, market-analysis, competitive, trends]

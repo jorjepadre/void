@@ -1,0 +1,37 @@
+id: language-variants/build-fix-cpp
+name: Build Fix (C++)
+version: "1.0.0"
+slash_command: /build-fix-cpp
+tags: [build, debugging, cpp]
+depends_on:
+  skills: [languages/cpp/patterns, build/resolver-cpp]
+  agents: [build-resolver-cpp]
+  commands: []
+
+description: Incrementally fix C++ build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-cpp
+    action: "Run `cmake --build build` and capture all diagnostics. Also run `clang-tidy && cppcheck` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-cpp
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-cpp
+    action: "Fix one error at a time for typical C++ issues (undefined reference linker, template instantiation, narrowing conversion, missing header, UB warnings). Apply minimal edits, re-run `cmake --build build` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-cpp
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

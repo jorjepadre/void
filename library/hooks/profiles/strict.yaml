@@ -1,0 +1,23 @@
+name: strict
+description: Strict hook profile — all quality and safety gates
+hooks:
+  - secret-detection
+  - dangerous-command-block
+  - no-verify-block
+  - config-protection
+  - auto-format
+  - type-check
+  - lint-check
+  - console-removal
+  - build-analysis
+  - design-quality
+  - mcp-health
+  - git-push-review
+  - pr-created-log
+  - suggest-compact
+  - doc-file-warning
+  - desktop-notify
+  - governance-capture
+  - dev-server-block
+  - cost-tracker
+  - post-edit-accumulate

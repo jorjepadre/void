@@ -1,0 +1,44 @@
+id: languages/csharp
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Use PascalCase for types, methods, and properties; camelCase for locals and parameters"
+      - "Prefix interfaces with I"
+      - "Use var when the right-hand side makes the type obvious"
+      - "Use expression-bodied members for short methods and properties"
+
+  typing:
+    weight: 10
+    rules:
+      - "Enable nullable reference types and annotate nullability"
+      - "Prefer records for immutable data models"
+      - "Use init-only setters for immutable properties with object initializers"
+      - "Use pattern matching and switch expressions for exhaustive branching"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Prefer LINQ for collection transformations when it improves readability"
+      - "Materialize queries explicitly with ToList or ToArray when side-effects or multiple enumeration matter"
+      - "Dispose IDisposable resources with using declarations"
+      - "Favor interfaces and dependency injection for testable code"
+
+  async:
+    weight: 10
+    rules:
+      - "Use async/await end-to-end; avoid .Result and .Wait()"
+      - "Suffix async methods with Async"
+      - "Pass CancellationToken through async APIs"
+      - "Use ConfigureAwait(false) in library code"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Throw specific exception types with clear messages"
+      - "Do not catch Exception unless rethrowing or logging at a boundary"
+      - "Preserve stack traces by using throw without an argument"

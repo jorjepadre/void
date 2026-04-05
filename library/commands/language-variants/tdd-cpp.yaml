@@ -1,0 +1,42 @@
+id: language-variants/tdd-cpp
+name: TDD (C++)
+version: "1.0.0"
+slash_command: /tdd-cpp
+tags: [testing, tdd, cpp]
+depends_on:
+  skills: [languages/cpp/patterns, languages/cpp/testing, tdd-workflow]
+  agents: [tdd-guide-cpp]
+  commands: []
+
+description: Enforce red-green-refactor TDD for C++ using GoogleTest or Catch2.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: C++ function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in C++ with todo/panic/not-implemented stubs. Write tests using GoogleTest or Catch2 covering happy path, edges, and errors. Run `ctest --test-dir build` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic C++ (RAII, smart pointers, const correctness, rule of zero, no raw new/delete). Minimal code only. Re-run `ctest --test-dir build` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `ctest --test-dir build` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `gcovr -r . --html-details coverage/` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

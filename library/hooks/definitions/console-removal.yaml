@@ -1,0 +1,11 @@
+id: console-removal
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+  file_path: "**/*.{ts,tsx,js,jsx}"
+priority: 20
+timeout_ms: 5000
+command: "void hook run console-removal"
+description: Flags stray console.log / debugger statements introduced in edited JS/TS files.
+profiles: [standard, strict]
+enabled: true

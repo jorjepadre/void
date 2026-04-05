@@ -1,0 +1,36 @@
+id: language-variants/code-review-kotlin
+name: Code Review (Kotlin)
+version: "1.0.0"
+slash_command: /code-review-kotlin
+tags: [review, quality, kotlin]
+depends_on:
+  skills: [languages/kotlin/patterns, code-quality/reviewer-kotlin, security/scanner]
+  agents: [reviewer-kotlin]
+  commands: []
+
+description: Kotlin-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-generic
+    action: "Gather changed Kotlin files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Run static analysis: `./gradlew detekt ktlintCheck`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-generic
+    action: "Manual review pass for Kotlin. Check idiomatic patterns (val over var, data classes, sealed classes, scope functions, no !! on nullable), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

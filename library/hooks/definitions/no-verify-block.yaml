@@ -1,0 +1,11 @@
+id: no-verify-block
+event: PreToolUse
+matcher:
+  tool_name: "^Bash$"
+  command: "git (commit|push).*--no-verify"
+priority: 950
+timeout_ms: 1000
+command: "void hook run no-verify-block"
+description: Blocks git commands that attempt to bypass commit or push hooks via --no-verify.
+profiles: [minimal, standard, strict]
+enabled: true

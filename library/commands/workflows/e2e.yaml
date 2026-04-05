@@ -1,0 +1,48 @@
+id: workflows/e2e
+name: End-to-End Testing
+version: "1.0.0"
+slash_command: /e2e
+tags: [testing, e2e, playwright, workflow]
+depends_on:
+  skills: [e2e-testing, testing/page-object-model]
+  agents: [e2e-runner]
+  commands: []
+
+description: Generate or update end-to-end coverage for a user flow, execute the relevant tests, and collect artifacts.
+
+parameters:
+  - name: flow
+    type: string
+    required: true
+    description: User flow to test (e.g., "login and checkout")
+  - name: browser
+    type: enum
+    required: false
+    description: Target browser
+    default: chromium
+    values: [chromium, firefox, webkit, all]
+  - name: headed
+    type: boolean
+    required: false
+    description: Run in headed mode for debugging
+    default: false
+
+steps:
+  - agent: testing/e2e-runner
+    action: "Analyze the user flow '{{flow}}'. Identify entry points, key interactions, assertions, and test data. Propose a Page Object Model structure and list data-testid selectors that need to exist."
+    await_result: true
+    on_failure: abort
+  - agent: testing/e2e-runner
+    action: "Generate or update the Playwright spec for '{{flow}}'. Include happy path, empty-state, and one failure-recovery scenario. Prefer waits on API responses over arbitrary timeouts."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: testing/e2e-runner
+    action: "Run the spec for '{{flow}}' on {{browser}} (headed={{headed}}). Only run this spec unless the user asked for the full suite."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: testing/e2e-runner
+    action: "Collect artifacts (screenshots, traces, video on failure). Report pass/fail counts, flake risk, and concrete next fixes."
+    await_result: true
+    on_failure: skip

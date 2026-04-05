@@ -1,0 +1,36 @@
+id: language-variants/code-review-swift
+name: Code Review (Swift)
+version: "1.0.0"
+slash_command: /code-review-swift
+tags: [review, quality, swift]
+depends_on:
+  skills: [languages/swift/patterns, code-quality/reviewer-swift, security/scanner]
+  agents: [reviewer-swift]
+  commands: []
+
+description: Swift-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-generic
+    action: "Gather changed Swift files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Run static analysis: `swiftlint lint --strict`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-generic
+    action: "Manual review pass for Swift. Check idiomatic patterns (value types, guard let, Result, protocol-oriented, no force unwrap), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-generic
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

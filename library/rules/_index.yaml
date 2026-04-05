@@ -1,0 +1,105 @@
+version: 1
+description: Catalog of Void rule definitions organized by layer and specificity.
+
+rules:
+  - id: common/coding-style
+    path: common/coding-style.yaml
+    layer: common
+    specificity: 0
+    languages: [all]
+
+  - id: common/git-workflow
+    path: common/git-workflow.yaml
+    layer: common
+    specificity: 0
+    languages: [all]
+
+  - id: common/testing
+    path: common/testing.yaml
+    layer: common
+    specificity: 0
+    languages: [all]
+
+  - id: common/performance
+    path: common/performance.yaml
+    layer: common
+    specificity: 0
+    languages: [all]
+
+  - id: common/security
+    path: common/security.yaml
+    layer: common
+    specificity: 0
+    languages: [all]
+
+  - id: languages/typescript
+    path: languages/typescript.yaml
+    layer: language
+    specificity: 10
+    languages: [typescript, javascript]
+
+  - id: languages/python
+    path: languages/python.yaml
+    layer: language
+    specificity: 10
+    languages: [python]
+
+  - id: languages/go
+    path: languages/go.yaml
+    layer: language
+    specificity: 10
+    languages: [go]
+
+  - id: languages/rust
+    path: languages/rust.yaml
+    layer: language
+    specificity: 10
+    languages: [rust]
+
+  - id: languages/java
+    path: languages/java.yaml
+    layer: language
+    specificity: 10
+    languages: [java]
+
+  - id: languages/kotlin
+    path: languages/kotlin.yaml
+    layer: language
+    specificity: 10
+    languages: [kotlin]
+
+  - id: languages/swift
+    path: languages/swift.yaml
+    layer: language
+    specificity: 10
+    languages: [swift]
+
+  - id: languages/cpp
+    path: languages/cpp.yaml
+    layer: language
+    specificity: 10
+    languages: [cpp, c++]
+
+  - id: languages/csharp
+    path: languages/csharp.yaml
+    layer: language
+    specificity: 10
+    languages: [csharp, "c#"]
+
+  - id: languages/dart
+    path: languages/dart.yaml
+    layer: language
+    specificity: 10
+    languages: [dart, flutter]
+
+  - id: languages/php
+    path: languages/php.yaml
+    layer: language
+    specificity: 10
+    languages: [php]
+
+  - id: languages/perl
+    path: languages/perl.yaml
+    layer: language
+    specificity: 10
+    languages: [perl]

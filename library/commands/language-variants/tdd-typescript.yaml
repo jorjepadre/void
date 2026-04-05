@@ -1,0 +1,42 @@
+id: language-variants/tdd-typescript
+name: TDD (TypeScript)
+version: "1.0.0"
+slash_command: /tdd-typescript
+tags: [testing, tdd, typescript]
+depends_on:
+  skills: [languages/typescript/patterns, languages/typescript/testing, tdd-workflow]
+  agents: [tdd-guide-typescript]
+  commands: []
+
+description: Enforce red-green-refactor TDD for TypeScript using Jest or Vitest.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: TypeScript function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in TypeScript with todo/panic/not-implemented stubs. Write tests using Jest or Vitest covering happy path, edges, and errors. Run `npm test` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic TypeScript (const, strict null checks, discriminated unions, no any). Minimal code only. Re-run `npm test` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `npm test` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `npm test -- --coverage` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

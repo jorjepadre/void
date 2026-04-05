@@ -1,0 +1,11 @@
+id: build-analysis
+event: PostToolUse
+matcher:
+  tool_name: "^Bash$"
+  command: "(npm|yarn|pnpm) (run )?build"
+priority: 15
+timeout_ms: 10000
+command: "void hook run build-analysis"
+description: Parses build output, highlights warnings, bundle size regressions, and failed steps.
+profiles: [strict]
+enabled: true

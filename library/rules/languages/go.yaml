@@ -1,0 +1,44 @@
+id: languages/go
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Format every file with gofmt before committing"
+      - "Use MixedCaps for exported identifiers and lowerMixedCaps for unexported"
+      - "Keep package names short, lowercase, and singular"
+      - "Run go vet and a linter as part of the build"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Return errors as the last return value"
+      - "Handle errors explicitly; do not discard with _"
+      - "Wrap errors with context using fmt.Errorf and %w"
+      - "Use errors.Is and errors.As for inspection"
+      - "Panic only for truly unrecoverable programmer errors"
+
+  interfaces:
+    weight: 10
+    rules:
+      - "Keep interfaces small; accept interfaces, return concrete types"
+      - "Define interfaces where they are consumed, not where they are implemented"
+      - "Prefer composition over embedding gymnastics"
+
+  concurrency:
+    weight: 10
+    rules:
+      - "Pass data via channels rather than sharing memory"
+      - "Always know how a goroutine exits; avoid leaks"
+      - "Use context.Context to propagate cancellation and deadlines"
+      - "Protect shared state with sync primitives when channels do not fit"
+
+  structure:
+    weight: 10
+    rules:
+      - "Keep package APIs minimal and cohesive"
+      - "Avoid circular dependencies between packages"
+      - "Place related tests alongside the code in _test.go files"

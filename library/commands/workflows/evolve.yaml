@@ -1,0 +1,37 @@
+id: workflows/evolve
+name: Evolve Patterns
+version: "1.0.0"
+slash_command: /evolve
+tags: [learning, meta, workflow]
+depends_on:
+  skills: [learning/pattern-extraction, learning/clustering]
+  agents: [pattern-curator]
+  commands: []
+
+description: Analyze captured session patterns and cluster them into new skills, commands, or agents.
+
+parameters:
+  - name: generate
+    type: boolean
+    required: false
+    description: Actually write evolved files instead of just reporting candidates
+    default: false
+  - name: min_confidence
+    type: number
+    required: false
+    description: Minimum confidence percentage for clustering
+    default: 80
+
+steps:
+  - agent: design/architect
+    action: "Read captured patterns from project and global scopes. Project scope takes precedence on ID conflicts. Filter to confidence >= {{min_confidence}}%."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Cluster patterns by trigger and domain. Classify each cluster as skill candidate (auto-triggered), command candidate (user-invoked), or agent candidate (multi-step with isolation needs)."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "If generate={{generate}} is true, write evolved files into evolved/{skills,commands,agents}. Otherwise emit the analysis only, listing each candidate with source patterns and average confidence."
+    await_result: true
+    on_failure: skip

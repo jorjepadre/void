@@ -1,0 +1,42 @@
+id: language-variants/tdd-php
+name: TDD (PHP)
+version: "1.0.0"
+slash_command: /tdd-php
+tags: [testing, tdd, php]
+depends_on:
+  skills: [languages/php/patterns, languages/php/testing, tdd-workflow]
+  agents: [tdd-guide-php]
+  commands: []
+
+description: Enforce red-green-refactor TDD for PHP using PHPUnit with Mockery.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: PHP function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in PHP with todo/panic/not-implemented stubs. Write tests using PHPUnit with Mockery covering happy path, edges, and errors. Run `./vendor/bin/phpunit` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic PHP (strict_types=1, typed properties, PSR-12, readonly classes, no global state). Minimal code only. Re-run `./vendor/bin/phpunit` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `./vendor/bin/phpunit` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `./vendor/bin/phpunit --coverage-text` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

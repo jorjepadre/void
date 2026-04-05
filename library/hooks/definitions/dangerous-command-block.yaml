@@ -1,0 +1,11 @@
+id: dangerous-command-block
+event: PreToolUse
+matcher:
+  tool_name: "^Bash$"
+  command: "(rm -rf /|sudo rm|DROP TABLE|format |mkfs|dd if=)"
+priority: 1000
+timeout_ms: 2000
+command: "void hook run dangerous-command-block"
+description: Blocks destructive shell commands before execution (recursive deletes, disk formatting, SQL drops).
+profiles: [minimal, standard, strict]
+enabled: true

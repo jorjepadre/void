@@ -1,0 +1,42 @@
+id: language-variants/tdd-python
+name: TDD (Python)
+version: "1.0.0"
+slash_command: /tdd-python
+tags: [testing, tdd, python]
+depends_on:
+  skills: [languages/python/patterns, languages/python/testing, tdd-workflow]
+  agents: [tdd-guide-python]
+  commands: []
+
+description: Enforce red-green-refactor TDD for Python using pytest with fixtures and parametrize.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Python function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in Python with todo/panic/not-implemented stubs. Write tests using pytest with fixtures and parametrize covering happy path, edges, and errors. Run `pytest` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic Python (type hints, dataclasses, context managers, no bare except). Minimal code only. Re-run `pytest` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `pytest` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `pytest --cov --cov-report=term-missing` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

@@ -1,0 +1,36 @@
+id: language-variants/code-review-rust
+name: Code Review (Rust)
+version: "1.0.0"
+slash_command: /code-review-rust
+tags: [review, quality, rust]
+depends_on:
+  skills: [languages/rust/patterns, code-quality/reviewer-rust, security/scanner]
+  agents: [reviewer-rust]
+  commands: []
+
+description: Rust-specific code review covering idiomatic patterns, safety, and security.
+
+parameters:
+  - name: target
+    type: string
+    required: false
+    description: Files, directory, or blank for changed files
+    default: ""
+
+steps:
+  - agent: code-quality/reviewer-rust
+    action: "Gather changed Rust files. If {{target}} is empty, use `git diff --name-only HEAD`. Otherwise use {{target}}. Read each file in full."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-rust
+    action: "Run static analysis: `cargo clippy -- -D warnings && cargo fmt --check`. Record findings with severity."
+    await_result: true
+    on_failure: skip
+  - agent: code-quality/reviewer-rust
+    action: "Manual review pass for Rust. Check idiomatic patterns (Result over panic, explicit lifetimes, traits over inheritance, no unwrap in libraries), error handling, concurrency safety, input validation, and injection risks. Tag findings CRITICAL/HIGH/MEDIUM/LOW with file:line."
+    await_result: true
+    on_failure: abort
+  - agent: code-quality/reviewer-rust
+    action: "Decide APPROVE / REQUEST_CHANGES / BLOCK. Block on any CRITICAL or HIGH finding. Emit the report."
+    await_result: true
+    on_failure: abort

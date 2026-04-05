@@ -1,0 +1,10 @@
+id: mcp-health
+event: PreToolUse
+matcher:
+  tool_name: "mcp__.*"
+priority: 800
+timeout_ms: 3000
+command: "void hook run mcp-health"
+description: Verifies the target MCP server is reachable and healthy before dispatching a tool call.
+profiles: [standard, strict]
+enabled: true

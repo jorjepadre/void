@@ -1,0 +1,46 @@
+id: workflows/refactor
+name: Safe Refactor
+version: "1.0.0"
+slash_command: /refactor
+tags: [refactor, quality, workflow]
+depends_on:
+  skills: [refactoring/safe-transforms, dead-code/detection]
+  agents: [refactorer]
+  commands: []
+
+description: Identify dead code, duplication, and structural issues, then refactor behind a passing test suite.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Module, file, or pattern to refactor
+  - name: goal
+    type: enum
+    required: false
+    description: Primary refactor goal
+    default: clarity
+    values: [clarity, performance, deduplication, dead-code, decoupling]
+
+steps:
+  - agent: refactoring/refactor-cleaner
+    action: "Establish a green test baseline covering {{target}}. If coverage is insufficient for the {{goal}} refactor, add characterization tests first."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Analyze {{target}} for {{goal}}. List concrete opportunities categorized SAFE / CAUTION / DANGER based on blast radius."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Apply SAFE refactors one at a time on {{target}}. Run tests after each edit; revert immediately if any test fails."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: refactoring/refactor-cleaner
+    action: "For CAUTION items on {{target}}, search for dynamic imports and external references. Propose changes but do not apply without confirmation."
+    await_result: true
+    on_failure: skip
+  - agent: refactoring/refactor-cleaner
+    action: "Summarize what was refactored, what was skipped, and the diff in test count, coverage, and file size for {{target}}."
+    await_result: true
+    on_failure: skip

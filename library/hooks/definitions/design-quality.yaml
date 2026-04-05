@@ -1,0 +1,11 @@
+id: design-quality
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+  file_path: "**/*.{tsx,jsx,html,vue,svelte}"
+priority: 10
+timeout_ms: 8000
+command: "void hook run design-quality"
+description: Reviews UI component edits for accessibility, semantic markup, and design-system adherence.
+profiles: [strict]
+enabled: true

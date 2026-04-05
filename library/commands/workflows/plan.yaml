@@ -1,0 +1,42 @@
+id: workflows/plan
+name: Task Planning and Breakdown
+version: "1.0.0"
+slash_command: /plan
+tags: [planning, architecture, workflow]
+depends_on:
+  skills: [planning/requirements]
+  agents: [planner]
+  commands: []
+
+description: Restate requirements, surface risks, produce a phased implementation plan, then wait for user confirmation.
+
+parameters:
+  - name: request
+    type: string
+    required: true
+    description: The feature request or change to plan
+  - name: scope
+    type: enum
+    required: false
+    description: Scope of the plan
+    default: feature
+    values: [feature, refactor, architecture, bugfix]
+
+steps:
+  - agent: design/planner
+    action: "Restate the request in crisp, testable terms: {{request}}. List unknowns and any clarifying questions."
+    await_result: true
+    on_failure: abort
+  - agent: design/planner
+    action: "Decompose {{request}} ({{scope}} scope) into numbered phases. For each phase list steps, files touched, and dependencies on other phases."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: design/planner
+    action: "Produce a risk register for {{request}}: rank risks High/Medium/Low with mitigation notes. Give a complexity estimate and rough time budget."
+    await_result: true
+    on_failure: skip
+  - agent: design/planner
+    action: "Present the full plan to the user and WAIT for explicit confirmation (yes/modify/abort) before any code is touched."
+    await_result: true
+    on_failure: abort

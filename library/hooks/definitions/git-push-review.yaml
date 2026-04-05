@@ -1,0 +1,11 @@
+id: git-push-review
+event: PreToolUse
+matcher:
+  tool_name: "^Bash$"
+  command: "git push"
+priority: 500
+timeout_ms: 5000
+command: "void hook run git-push-review"
+description: Runs a pre-push review — confirms branch target, checks for large files and protected-branch pushes.
+profiles: [strict]
+enabled: true

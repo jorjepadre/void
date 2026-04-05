@@ -1,0 +1,238 @@
+version: "1.0.0"
+description: Catalog of Void skills organized by category.
+
+skills:
+  # Languages
+  - id: languages/typescript
+    path: languages/typescript/patterns.md
+    category: languages
+    language: typescript
+    tags: [typescript, language, patterns]
+  - id: languages/python
+    path: languages/python/patterns.md
+    category: languages
+    language: python
+    tags: [python, language, patterns]
+  - id: languages/go
+    path: languages/go/patterns.md
+    category: languages
+    language: go
+    tags: [go, golang, patterns]
+  - id: languages/rust
+    path: languages/rust/patterns.md
+    category: languages
+    language: rust
+    tags: [rust, patterns, ownership]
+  - id: languages/java
+    path: languages/java/patterns.md
+    category: languages
+    language: java
+    tags: [java, patterns]
+  - id: languages/kotlin
+    path: languages/kotlin/patterns.md
+    category: languages
+    language: kotlin
+    tags: [kotlin, patterns, coroutines]
+  - id: languages/swift
+    path: languages/swift/patterns.md
+    category: languages
+    language: swift
+    tags: [swift, patterns, concurrency]
+  - id: languages/cpp
+    path: languages/cpp/patterns.md
+    category: languages
+    language: cpp
+    tags: [cpp, c++, patterns]
+  - id: languages/csharp
+    path: languages/csharp/patterns.md
+    category: languages
+    language: csharp
+    tags: [csharp, dotnet, patterns]
+  - id: languages/dart
+    path: languages/dart/patterns.md
+    category: languages
+    language: dart
+    tags: [dart, flutter, patterns]
+  - id: languages/php
+    path: languages/php/patterns.md
+    category: languages
+    language: php
+    tags: [php, patterns]
+  - id: languages/perl
+    path: languages/perl/patterns.md
+    category: languages
+    language: perl
+    tags: [perl, patterns]
+
+  # Frameworks
+  - id: frameworks/react
+    path: frameworks/react.md
+    category: frameworks
+    language: typescript
+    tags: [react, frontend, framework]
+  - id: frameworks/nextjs
+    path: frameworks/nextjs.md
+    category: frameworks
+    language: typescript
+    tags: [nextjs, react, framework, ssr]
+  - id: frameworks/svelte
+    path: frameworks/svelte.md
+    category: frameworks
+    language: typescript
+    tags: [svelte, sveltekit, frontend]
+  - id: frameworks/vue
+    path: frameworks/vue.md
+    category: frameworks
+    language: typescript
+    tags: [vue, frontend, composition-api]
+  - id: frameworks/django
+    path: frameworks/django.md
+    category: frameworks
+    language: python
+    tags: [django, python, framework, backend]
+  - id: frameworks/fastapi
+    path: frameworks/fastapi.md
+    category: frameworks
+    language: python
+    tags: [fastapi, python, api, async]
+  - id: frameworks/flask
+    path: frameworks/flask.md
+    category: frameworks
+    language: python
+    tags: [flask, python, web, backend]
+  - id: frameworks/spring-boot
+    path: frameworks/spring-boot.md
+    category: frameworks
+    language: java
+    tags: [spring-boot, java, backend, api]
+  - id: frameworks/ktor
+    path: frameworks/ktor.md
+    category: frameworks
+    language: kotlin
+    tags: [ktor, kotlin, backend, async]
+  - id: frameworks/laravel
+    path: frameworks/laravel.md
+    category: frameworks
+    language: php
+    tags: [laravel, php, framework, backend]
+  - id: frameworks/express
+    path: frameworks/express.md
+    category: frameworks
+    language: typescript
+    tags: [express, nodejs, backend, api]
+  - id: frameworks/flutter
+    path: frameworks/flutter.md
+    category: frameworks
+    language: dart
+    tags: [flutter, dart, mobile, ui]
+  - id: frameworks/rails
+    path: frameworks/rails.md
+    category: frameworks
+    language: ruby
+    tags: [rails, ruby, framework, backend]
+  - id: frameworks/pytorch
+    path: frameworks/pytorch.md
+    category: frameworks
+    language: python
+    tags: [pytorch, ml, deep-learning, python]
+  - id: frameworks/bun
+    path: frameworks/bun.md
+    category: frameworks
+    language: typescript
+    tags: [bun, runtime, javascript, typescript]
+  - id: frameworks/nuxt
+    path: frameworks/nuxt.md
+    category: frameworks
+    language: typescript
+    tags: [nuxt, vue, ssr, frontend]
+
+  # Domains
+  - id: domains/code-review
+    path: domains/code-review.md
+    category: domains
+    language: null
+    tags: [code-review, quality, process]
+  - id: domains/security-review
+    path: domains/security-review.md
+    category: domains
+    language: null
+    tags: [security, review, owasp]
+  - id: domains/tdd
+    path: domains/tdd.md
+    category: domains
+    language: null
+    tags: [tdd, testing, workflow]
+  - id: domains/e2e-testing
+    path: domains/e2e-testing.md
+    category: domains
+    language: null
+    tags: [e2e, testing, integration]
+  - id: domains/api-design
+    path: domains/api-design.md
+    category: domains
+    language: null
+    tags: [api, rest, graphql, grpc, design]
+  - id: domains/database-patterns
+    path: domains/database-patterns.md
+    category: domains
+    language: null
+    tags: [database, sql, migrations, indexing]
+  - id: domains/deployment
+    path: domains/deployment.md
+    category: domains
+    language: null
+    tags: [deployment, devops, release]
+  - id: domains/docker
+    path: domains/docker.md
+    category: domains
+    language: null
+    tags: [docker, containers, devops]
+  - id: domains/ci-cd
+    path: domains/ci-cd.md
+    category: domains
+    language: null
+    tags: [ci-cd, pipelines, devops]
+  - id: domains/performance
+    path: domains/performance.md
+    category: domains
+    language: null
+    tags: [performance, optimization, profiling, caching]
+
+  # Agentic
+  - id: agentic/autonomous-loop
+    path: agentic/autonomous-loop.md
+    category: agentic
+    language: null
+    tags: [agent, autonomous, loop, orchestration]
+  - id: agentic/verification-loop
+    path: agentic/verification-loop.md
+    category: agentic
+    language: null
+    tags: [agent, verification, quality, checker]
+  - id: agentic/gan-harness
+    path: agentic/gan-harness.md
+    category: agentic
+    language: null
+    tags: [agent, gan, adversarial, quality]
+  - id: agentic/continuous-learning
+    path: agentic/continuous-learning.md
+    category: agentic
+    language: null
+    tags: [agent, learning, memory, patterns]
+  - id: agentic/self-repair
+    path: agentic/self-repair.md
+    category: agentic
+    language: null
+    tags: [agent, resilience, recovery, error-handling]
+
+  # Research
+  - id: research/deep-research
+    path: research/deep-research.md
+    category: research
+    language: null
+    tags: [research, investigation, synthesis]
+  - id: research/market-research
+    path: research/market-research.md
+    category: research
+    language: null
+    tags: [research, market, business, strategy]

@@ -1,0 +1,37 @@
+id: language-variants/build-fix-java
+name: Build Fix (Java)
+version: "1.0.0"
+slash_command: /build-fix-java
+tags: [build, debugging, java]
+depends_on:
+  skills: [languages/java/patterns, build/resolver-java]
+  agents: [build-resolver-java]
+  commands: []
+
+description: Incrementally fix Java build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-java
+    action: "Run `mvn compile || ./gradlew compileJava` and capture all diagnostics. Also run `mvn spotbugs:check || ./gradlew check` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-java
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-java
+    action: "Fix one error at a time for typical Java issues (NullPointerException risk, unchecked cast, raw types, missing override). Apply minimal edits, re-run `mvn compile || ./gradlew compileJava` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-java
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

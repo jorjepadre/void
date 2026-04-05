@@ -1,0 +1,6 @@
+name: minimal
+description: Minimal hook profile — only critical security hooks
+hooks:
+  - secret-detection
+  - dangerous-command-block
+  - no-verify-block

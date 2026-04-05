@@ -1,0 +1,37 @@
+id: language-variants/build-fix-dart
+name: Build Fix (Dart/Flutter)
+version: "1.0.0"
+slash_command: /build-fix-dart
+tags: [build, debugging, dart]
+depends_on:
+  skills: [languages/dart/patterns, build/resolver-dart]
+  agents: [build-resolver-dart]
+  commands: []
+
+description: Incrementally fix Dart/Flutter build, compiler, and linter errors with minimal, surgical edits.
+
+parameters:
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum attempts on the same error
+    default: 3
+
+steps:
+  - agent: build/resolver-generic
+    action: "Run `flutter build && dart analyze` and capture all diagnostics. Also run `dart analyze --fatal-infos` for static analysis."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Parse output, group errors by file, and order by severity (compile errors before warnings). Report total count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Fix one error at a time for typical Dart/Flutter issues (null check operator on null, undefined identifier, type not a subtype, missing required parameter). Apply minimal edits, re-run `flutter build && dart analyze` after each, stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-generic
+    action: "Emit summary: errors fixed, files modified, errors remaining, and suggested next steps."
+    await_result: true
+    on_failure: skip

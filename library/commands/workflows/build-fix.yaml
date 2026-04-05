@@ -1,0 +1,42 @@
+id: workflows/build-fix
+name: Build and Fix
+version: "1.0.0"
+slash_command: /build-fix
+tags: [build, debugging, workflow]
+depends_on:
+  skills: [build/diagnostics]
+  agents: [build-resolver]
+  commands: []
+
+description: Incrementally fix build and type errors with minimal, surgical changes verified after each fix.
+
+parameters:
+  - name: build_command
+    type: string
+    required: false
+    description: Explicit build command to run; leave blank to auto-detect from project files
+    default: ""
+  - name: max_attempts
+    type: number
+    required: false
+    description: Maximum retries on the same error before stopping
+    default: 3
+
+steps:
+  - agent: build/resolver-generic
+    action: "Detect build system from project files (package.json, tsconfig.json, Cargo.toml, pom.xml, build.gradle, go.mod, pyproject.toml). Use {{build_command}} if provided; else auto-select. Run the build and capture stderr."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Parse compiler output, group errors by file, and sort by dependency order (imports and type definitions before logic). Report total error count."
+    await_result: true
+    on_failure: abort
+  - agent: build/resolver-generic
+    action: "Fix one error at a time: read 10 lines around the error, diagnose root cause, apply the minimal edit, then re-run the build and confirm the error is gone and no new errors appeared. Stop after {{max_attempts}} attempts on the same error."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: build/resolver-generic
+    action: "Emit summary: errors fixed (with file paths), errors remaining, any new errors introduced, and suggested next steps for unresolved issues."
+    await_result: true
+    on_failure: skip

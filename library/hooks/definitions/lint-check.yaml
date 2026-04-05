@@ -1,0 +1,10 @@
+id: lint-check
+event: PostToolUse
+matcher:
+  tool_name: "^(Edit|Write)$"
+priority: 30
+timeout_ms: 15000
+command: "void hook run lint-check"
+description: Runs the project linter on edited files and reports violations.
+profiles: [standard, strict]
+enabled: true

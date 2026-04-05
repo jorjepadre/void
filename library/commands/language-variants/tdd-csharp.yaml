@@ -1,0 +1,42 @@
+id: language-variants/tdd-csharp
+name: TDD (C#)
+version: "1.0.0"
+slash_command: /tdd-csharp
+tags: [testing, tdd, csharp]
+depends_on:
+  skills: [languages/csharp/patterns, languages/csharp/testing, tdd-workflow]
+  agents: [tdd-guide-csharp]
+  commands: []
+
+description: Enforce red-green-refactor TDD for C# using xUnit with FluentAssertions and Moq.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: C# function, method, or module to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage
+    default: 80
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED. Scaffold signatures for {{target}} in C# with todo/panic/not-implemented stubs. Write tests using xUnit with FluentAssertions and Moq covering happy path, edges, and errors. Run `dotnet test` and confirm failure for the expected reason."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN. Implement {{target}} in idiomatic C# (nullable reference types, records, async/await throughout, IDisposable via using). Minimal code only. Re-run `dotnet test` until all pass."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR. Tighten naming and types on {{target}}. Re-run `dotnet test` after each edit."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "COVERAGE. Run `dotnet test /p:CollectCoverage=true` and confirm >= {{coverage_target}}% for {{target}}. Add tests for uncovered branches."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

@@ -1,0 +1,42 @@
+id: language-variants/refactor-java
+name: Refactor (Java)
+version: "1.0.0"
+slash_command: /refactor-java
+tags: [refactor, quality, java]
+depends_on:
+  skills: [languages/java/patterns, refactoring/safe-transforms]
+  agents: [refactorer-java]
+  commands: []
+
+description: Safely refactor Java code behind a passing test suite, favoring idiomatic patterns.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Java module, file, or pattern to refactor
+  - name: goal
+    type: enum
+    required: false
+    description: Primary refactor goal
+    default: clarity
+    values: [clarity, performance, deduplication, dead-code, decoupling]
+
+steps:
+  - agent: refactoring/refactor-cleaner
+    action: "Establish baseline: run `mvn test || ./gradlew test` and confirm green. If {{target}} coverage is insufficient for the {{goal}} refactor, add characterization tests first."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Analyze {{target}} (Java) for {{goal}} opportunities applying idiomatic patterns (immutable fields, Optional over null, streams, proper equals/hashCode). Categorize as SAFE / CAUTION / DANGER."
+    await_result: true
+    on_failure: abort
+  - agent: refactoring/refactor-cleaner
+    action: "Apply SAFE refactors one at a time. Run `mvn test || ./gradlew test` after each; revert immediately on any failure."
+    await_result: true
+    on_failure: retry
+    max_retries: 2
+  - agent: refactoring/refactor-cleaner
+    action: "Summarize refactors applied, skipped, and changes in test count, coverage, and complexity for {{target}}."
+    await_result: true
+    on_failure: skip

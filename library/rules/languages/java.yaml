@@ -1,0 +1,44 @@
+id: languages/java
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Use camelCase for methods and variables, PascalCase for classes, UPPER_SNAKE for constants"
+      - "One public class per file matching the filename"
+      - "Organize imports and avoid wildcards"
+
+  typing:
+    weight: 10
+    rules:
+      - "Use records for immutable data carriers"
+      - "Prefer var for local variables when the type is obvious"
+      - "Use generics instead of raw types"
+      - "Favor immutability; mark fields final when possible"
+
+  idioms:
+    weight: 10
+    rules:
+      - "Use Optional for return values that may be absent; never for fields or parameters"
+      - "Prefer streams and collectors over manual iteration for transformations"
+      - "Use enhanced switch expressions for exhaustive pattern matching"
+      - "Program to interfaces, not implementations"
+      - "Use try-with-resources for AutoCloseable resources"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Throw specific exception types; avoid catching generic Exception"
+      - "Do not use exceptions for control flow"
+      - "Wrap checked exceptions at the boundary when they leak abstractions"
+      - "Include meaningful messages and context in thrown exceptions"
+
+  structure:
+    weight: 10
+    rules:
+      - "Keep classes focused; extract collaborators when responsibilities grow"
+      - "Prefer composition over inheritance"
+      - "Design for testability with dependency injection"

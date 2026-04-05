@@ -1,0 +1,43 @@
+id: workflows/security-scan
+name: Security Audit
+version: "1.0.0"
+slash_command: /security-scan
+tags: [security, audit, workflow]
+depends_on:
+  skills: [security/scanner, security/owasp]
+  agents: [security-auditor]
+  commands: []
+
+description: Scan the codebase for injection, auth, secrets, and dependency vulnerabilities, then report prioritized findings.
+
+parameters:
+  - name: scope
+    type: enum
+    required: false
+    description: Scan scope
+    default: changed
+    values: [changed, full, deps-only]
+  - name: fail_on
+    type: enum
+    required: false
+    description: Minimum severity that should fail the scan
+    default: high
+    values: [critical, high, medium, low]
+
+steps:
+  - agent: security/security-auditor
+    action: "Inventory code in scope={{scope}}. Identify entry points: HTTP handlers, auth layers, data access, file I/O, subprocess calls, template rendering."
+    await_result: true
+    on_failure: abort
+  - agent: security/security-auditor
+    action: "Run secrets detection and dependency vulnerability scanners appropriate to the project ecosystem. Capture CVEs, CVSS, and fixed-in versions."
+    await_result: true
+    on_failure: skip
+  - agent: security/security-auditor
+    action: "Manual review pass: injection (SQL/command/path), XSS, CSRF, auth/session handling, crypto misuse, SSRF, IDOR, unsafe deserialization. Tag each finding with severity and remediation."
+    await_result: true
+    on_failure: abort
+  - agent: security/security-auditor
+    action: "Emit a prioritized report. Return non-zero if any finding >= {{fail_on}}."
+    await_result: true
+    on_failure: abort

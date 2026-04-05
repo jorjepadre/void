@@ -1,0 +1,47 @@
+id: workflows/tdd
+name: Test-Driven Development
+version: "1.0.0"
+slash_command: /tdd
+tags: [testing, tdd, workflow, quality]
+depends_on:
+  skills: [tdd-workflow, testing/coverage]
+  agents: [tdd-guide]
+  commands: []
+
+description: Enforce red-green-refactor TDD cycle with explicit failing tests before implementation.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Feature, function, or behavior to implement via TDD
+  - name: coverage_target
+    type: number
+    required: false
+    description: Minimum line coverage percentage required
+    default: 80
+  - name: critical
+    type: boolean
+    required: false
+    description: Whether this is security- or money-critical code (requires 100% coverage)
+    default: false
+
+steps:
+  - agent: testing/tdd-guide
+    action: "RED phase. Write failing tests for {{target}}. Cover happy path, edge cases, error conditions, and boundary values. Run the test runner and confirm the tests fail for the expected reason. Do NOT write any implementation yet."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "GREEN phase. Write the minimal implementation required to make the failing tests for {{target}} pass. Run the tests after each change and stop as soon as everything is green."
+    await_result: true
+    on_failure: retry
+    max_retries: 3
+  - agent: testing/tdd-guide
+    action: "REFACTOR phase. Improve naming, extract constants, remove duplication, and tighten types on {{target}}. Re-run tests after every change. Abort the refactor step if any test turns red."
+    await_result: true
+    on_failure: abort
+  - agent: testing/tdd-guide
+    action: "Coverage phase. Run coverage for {{target}} and verify it meets {{coverage_target}}% (or 100% when critical={{critical}}). Report uncovered branches and add tests until the threshold is met."
+    await_result: true
+    on_failure: retry
+    max_retries: 2

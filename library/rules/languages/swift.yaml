@@ -1,0 +1,43 @@
+id: languages/swift
+layer: language
+specificity: 10
+extends: common/coding-style
+
+sections:
+  style:
+    weight: 10
+    rules:
+      - "Follow the Swift API Design Guidelines for naming clarity"
+      - "Use camelCase for methods and properties, PascalCase for types"
+      - "Name methods so call sites read as grammatical English"
+      - "Omit needless words while preserving clarity"
+
+  optionals:
+    weight: 10
+    rules:
+      - "Avoid force unwrapping; use if let, guard let, or nil-coalescing"
+      - "Use guard statements to exit early from invalid states"
+      - "Prefer optional chaining over nested conditionals"
+
+  types:
+    weight: 10
+    rules:
+      - "Prefer value types (struct, enum) over reference types by default"
+      - "Use protocols to define capabilities and enable polymorphism"
+      - "Leverage protocol extensions for default implementations"
+      - "Use enums with associated values to model state"
+
+  error_handling:
+    weight: 10
+    rules:
+      - "Define specific Error types per domain"
+      - "Use do/try/catch for recoverable errors"
+      - "Use Result for asynchronous or deferred error handling"
+      - "Avoid try! except where invariants guarantee success"
+
+  concurrency:
+    weight: 10
+    rules:
+      - "Prefer async/await over completion handlers"
+      - "Use actors to protect mutable state across concurrent contexts"
+      - "Mark types Sendable when crossing concurrency boundaries"

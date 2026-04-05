@@ -1,0 +1,47 @@
+id: workflows/performance-audit
+name: Performance Audit
+version: "1.0.0"
+slash_command: /performance-audit
+tags: [performance, profiling, workflow]
+depends_on:
+  skills: [performance/profiler, performance/bottleneck-hunting]
+  agents: [performance-analyst]
+  commands: []
+
+description: Profile hot paths, identify bottlenecks, and recommend ordered optimizations.
+
+parameters:
+  - name: target
+    type: string
+    required: true
+    description: Endpoint, function, or workload to profile
+  - name: workload
+    type: enum
+    required: false
+    description: Load profile
+    default: realistic
+    values: [realistic, peak, stress]
+  - name: metric
+    type: enum
+    required: false
+    description: Primary metric to optimize
+    default: latency
+    values: [latency, throughput, memory, cpu]
+
+steps:
+  - agent: design/architect
+    action: "Establish baseline for {{target}} under {{workload}} workload. Record {{metric}} at p50/p95/p99 plus memory and CPU."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "Profile {{target}}. Identify top 5 hot spots by {{metric}} with call-stack evidence."
+    await_result: true
+    on_failure: abort
+  - agent: design/architect
+    action: "For each hot spot, propose a fix, estimated win, and risk. Rank fixes by (win / effort)."
+    await_result: true
+    on_failure: skip
+  - agent: design/architect
+    action: "Emit an ordered optimization plan for {{target}} with expected {{metric}} improvements and regression checks."
+    await_result: true
+    on_failure: skip
